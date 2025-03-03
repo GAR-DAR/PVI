@@ -1,0 +1,120 @@
+/* Example CSS to show/hide a dropdown list with transitions */
+
+.user-panel {
+    background-color: var(--base2-clr);
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.user-panel-title {
+    color: var(--text-clr);
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    font-weight: bold;
+}
+
+.user-panel-buttons {
+    display: flex;
+    align-items: center;
+    column-gap: .75em;
+}
+
+.avatar-button {
+    width: 50px;
+    height: 50px;
+    padding: 0px;
+    margin: 10px;
+    background-color: transparent;
+    color: transparent;
+    border: 2px solid var(--base-clr);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-button:hover {
+    border: 2px solid var(--accent2-clr-t);
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-list {
+    position: absolute;
+    top: 5.5em;
+    right: 10px;
+    width: 80px;
+    border-radius: 2em;
+    background-color: var(--base2-clr);
+    display: grid;
+    row-gap: 0.25em;
+    padding: 1em 2.5em;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+
+    /* Default hidden state */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.4s, transform 0.4s;
+}
+
+.dropdown-link {
+    color: var(--text-clr);
+    text-decoration: none;
+    align-items: center;
+    column-gap: 1em;
+    padding: 0.25em 0.5em;
+    display: flex;
+}
+
+.dropdown-link:hover {
+    background-color: var(--light-hover-clr);
+    border-radius: 1em;
+    font-weight: bold;
+    color: var(--accent2-clr);
+}
+
+.dropdown-link:hover svg {
+    fill: var(--accent2-clr);
+}
+
+/* Arrow pointing upwards under the dropdown */
+.dropdown-list::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: -8px;
+    right: 0;
+    left: 0;
+    margin-inline: auto;
+    rotate: 45deg;
+    background-color: var(--base2-clr);
+}
+
+/* Toggled “show-dropdown” class makes it visible */
+.show-dropdown {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+}
+
+/* The transition to fade out */
+.close-dropdown {
+    opacity: 0 !important;
+    visibility: visible !important;
+    transform: translateY(-10px) !important;
+    pointer-events: none !important;
+}
+

@@ -1,0 +1,47 @@
+
+.ico-button {
+    background-color: transparent;
+    color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 1px 5px;
+   
+    max-width: 45px;
+    max-height: 45px;
+    min-width: 40px;    
+    min-height: 40px;
+
+}
+
+.ico-button:hover {
+    background-color: var(--dark-hover-clr);
+}
+
+.ico-button-on-light {
+    background-color: transparent;
+    color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 1px 5px;
+    width: 45px;
+    height: 45px;
+}
+
+.ico-button:hover {
+    background-color: var(--light-hover-clr);
+}
+
+.ico-button-on-light:hover{
+    background-color: var(--dark-hover-clr);
+}
+

@@ -1,0 +1,90 @@
+.students-div table {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    border-collapse: collapse;
+    background-color: var(--table-base-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI';
+    font-size: 14px;
+}
+
+.students-div th,
+.students-div td {
+    padding: 5px 10px;
+    text-align: center;
+    border: 3px solid var(--base-clr);
+    border-radius: 10px;
+    
+}
+
+.students-div th {
+    background-color: var(--table-header-clr);
+}
+
+.students-div td {
+    background-color: var(--table-base-clr);
+}
+
+.students-div tr:hover td{
+    background-color: var(--table-hover-clr);
+}
+
+.students-div .hidden {
+    display: none;
+}
+
+.students-div th:nth-child(2),
+.students-div td:nth-child(2) {
+    width: 20px;
+    text-align: center;
+}
+
+.students-div th:nth-child(3),
+.students-div td:nth-child(3) {
+    width: 100px;
+    text-align: center;
+}
+
+.students-div th:nth-child(4),
+.students-div td:nth-child(4) {
+    width: 150px;
+    text-align: center;
+}
+
+.students-div th:nth-child(5),
+.students-div td:nth-child(5) {
+    width: 100px;
+    text-align: center;
+}
+
+.students-div th:nth-child(6),
+.students-div td:nth-child(6) {
+    width: 150px;
+    text-align: center;
+}
+
+.students-div th:nth-child(7),
+.students-div td:nth-child(7) {
+    width: 20px;
+    text-align: center;
+}
+
+.students-div th:nth-child(8),
+.students-div td:nth-child(8) {
+    width: 60px;
+    text-align: center;
+}
+
+.students-div td:nth-child(8) .options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-icon {
+    width: 30px;
+    height: 30px;
+}
+

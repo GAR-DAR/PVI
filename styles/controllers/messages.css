@@ -1,0 +1,58 @@
+
+#messages_dropdown .dropdown-list {
+    
+    top: 5.5em;
+    left: -8.3em;
+
+    width: max-content;
+    padding: 2em 1.5em;
+
+    position: absolute;
+    top: 4.5rem;
+    row-gap: 0.4em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/*-------------------Messages <div> template ---------------------*/
+
+#messages_dropdown .message-div{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+    width: 100%;
+}
+
+#messages_dropdown .message-div:hover{
+    background-color: var(--el-hover-clr);
+}
+
+#messages_dropdown .message-div span {
+    background-color: var(--el-base-clr);
+    color: var(--text-clr);
+    padding: 0.5em;
+    border-radius: 1em;
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*
+#messages_dropdown .message-div::after{
+    content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        bottom: 5px;
+        right: 0;
+        left: -2.8px;
+        
+        rotate: 23deg;
+        background-color: var(--light-hover-clr);
+}*/
