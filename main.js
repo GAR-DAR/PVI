@@ -1,3 +1,8 @@
+
+
+
+//------------------------------------------------------------------------page initialization
+
 const page = document.querySelector('.page');
 const userPanel = document.getElementById('user-panel');
 const footer = document.getElementById('footer');
@@ -5,8 +10,15 @@ const footer = document.getElementById('footer');
 const toggleButton = document.getElementById('toggle-btn'); 
 const sidebar = document.getElementById('sidebar');
 
-const homePage = document.getElementById('home-page');
+//------------------------------------------------------------------------page loading
 
+
+loadHTML('./src/components/user_panel/user_panel.html', userPanel);
+loadHTML('./src/components/footer/footer.html', footer);
+
+loadPage('students_page');
+
+//------------------------------------------------------------------------load code function
 
 function loadHTML(url, element) {
     return fetch(url)
@@ -38,6 +50,8 @@ function loadPage(pageName) {
         });
 }
 
+//------------------------------------------------------------------------helper functions
+
 function selectButton(button) {
     const listItems = document.querySelectorAll('#sidebar ul li');
     listItems.forEach(li => li.classList.remove('active'));
@@ -45,11 +59,6 @@ function selectButton(button) {
     if (parentLi) {
         parentLi.classList.add('active');
     }
-}
-
-function redirectToHomePage() {
-    loadPage('students_page');
-    selectButton(homePage);
 }
 
 function toggleSidebar() {
@@ -74,11 +83,7 @@ function unreadedMessagesAnimation() {
     }, { once: true });
 }
 
-
-loadHTML('./src/components/user_panel/user_panel.html', userPanel);
-loadHTML('./src/components/footer/footer.html', footer);
-
-loadPage('students_page');
+//------------------------------------------------------------------------dropdown menu
 
 const avatarDropdownContainer = document.getElementById('avatar_dropdown');
 const avatarDropdownList = avatarDropdownContainer.querySelector('.dropdown-list');
@@ -125,4 +130,41 @@ document.addEventListener('click', (event) => {
     hideDropdown(avatarDropdownList);
     hideDropdown(messagesDropdownList);
   }
+});
+
+//------------------------------------------------------------------------page navigation event listeners
+
+document.getElementById("dashboard-nav").addEventListener('click', () => {
+    loadPage('dashboard_page');
+    selectButton(event.target);
+});
+
+document.getElementById("students-nav").addEventListener('click', () => {
+    loadPage('students_page');
+    selectButton(event.target);
+});
+
+document.getElementById("tasks-nav").addEventListener('click', () => {
+    loadPage('tasks_page');
+    selectButton(event.target);
+});
+
+document.getElementById("title-up").addEventListener('click', () => {
+    loadPage('students_page');
+    selectButton(event.target);
+});
+
+document.getElementById("messages-button").addEventListener('click', () => {
+    loadPage('chat_page');
+    selectButton(event.target);
+    hideDropdown(messagesDropdownList);
+});
+
+document.getElementById("messages-button").addEventListener('dblclick', () => {
+    unreadedMessagesAnimation();
+});
+
+document.getElementById("profile_btn").addEventListener('click', () => {
+    loadPage('profile_page');
+    selectButton(event.target);
 });
