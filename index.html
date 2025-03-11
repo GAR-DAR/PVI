@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="styles/page.css">
     <link rel="stylesheet" href="styles/students_page/pagination.css">
     <link rel="stylesheet" href="styles/students_page/students-table.css">
+    <link rel="stylesheet" href="styles/windows/students-form.css">
 </head>
 
 <body>
@@ -27,30 +28,57 @@
 
             <div class="user-panel-buttons">
                 <div class="dropdown" id="messages_dropdown">
-                    <button id="messages-button" class="ico-button">
+                    <button id="messages-button" id="messages-button" class="ico-button" ondblclick="unreadedMessagesAnimation()" onclick="loadPage('chat_page'); selectButton(this);">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
                             <path
                                 d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" />
                         </svg>
                     </button>
 
-                    <div class="dropdown-list">
-
-                        <div class="message-div">
-                            <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
-                            <span>Can't hide it , I love y...</span>
+                    <div class="dropdown-list" id="messages-list">
+                        <div class="message-item">
+                            <div class="avatar-container">
+                                <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
+                                <div class="status-indicator online"></div>
+                            </div>
+                            <div class="message-div">
+                                <div class="author-name">Iryna Hrabovenska</div>
+                                <div class="message-row">
+                                    <div class="message-text">Can't hide it, I love your new design!</div>
+                                    <div class="message-time">13:30</div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="message-div">
-                            <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
-                            <span>What's up?</span>
+                    
+                        <div class="message-item">
+                            <div class="avatar-container">
+                                <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
+                                <div class="status-indicator offline"></div>
+                            </div>
+                            <div class="message-div unread">
+                                <div class="author-name">Marichka Lytvin</div>
+                                <div class="message-row">
+                                    <div class="message-text">What's up?</div>
+                                    <div class="message-time">12:15</div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="message-div"> 
-                            <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
-                            <span>He know everything, RU...</span>
+                    
+                        <div class="message-item">
+                            <div class="avatar-container">
+                                <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
+                                <div class="status-indicator online"></div>
+                            </div>
+                            <div class="message-div">
+                                <div class="author-name">Marta Zastrizhna</div>
+                                <div class="message-row">
+                                    <div class="message-text">He know everything, RUN!</div>
+                                    <div class="message-time">10:45</div>
+                                </div>
+                            </div>
                         </div>
-
+                    
+                    
                     </div>
 
                 </div>
@@ -60,12 +88,12 @@
 
                 <div class="dropdown" id="avatar_dropdown">
 
-                    <button class="avatar-button" onclick="toggleDropdown(this);">
+                    <button class="avatar-button" onclick="loadPage('profile_page'); selectButton(this);">
                         <img src="assets/images/user-sample.png" alt="User Icon" class="avatar">
                     </button>
                 
                     <div class="dropdown-list">
-                        <a href="#" class="dropdown-link">
+                        <a href="#" class="dropdown-link" onclick="loadPage('profile_page'); selectButton(this);">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
                                 <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
                             </svg>

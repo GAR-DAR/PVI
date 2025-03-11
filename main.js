@@ -27,11 +27,9 @@ function loadHTML(url, element) {
 function loadPage(pageName) {
     loadHTML(`./src/pages/${pageName}/${pageName}.html`, page)
         .then(() => {
-            // Dynamically create and append the script
             const script = document.createElement('script');
             script.src = `./src/pages/${pageName}/${pageName}.js`;
             script.onload = () => {
-                // If the loaded script defines initPage(), call it
                 if (typeof initPage === 'function') {
                     initPage();
                 }
@@ -54,20 +52,33 @@ function redirectToHomePage() {
     selectButton(homePage);
 }
 
-
 function toggleSidebar() {
     sidebar.classList.toggle('close');
     toggleButton.classList.toggle('rotate');
 }
 
+function unreadedMessagesAnimation() {
+    const messagesIcon = document.getElementById('messages-button');
+    const svg = messagesIcon.querySelector('svg');
+
+    const originalSVGContent = svg.innerHTML;
+
+    svg.innerHTML = `
+        <path d="M440-440h80v-200h-80v200Zm40 120q17 0 28.5-11.5T520-360q0-17-11.5-28.5T480-400q-17 0-28.5 11.5T440-360q0 17 11.5 28.5T480-320ZM160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/>
+ `;
+    messagesIcon.classList.add('double-clicked');
+
+    messagesIcon.addEventListener('animationend', function() {
+        messagesIcon.classList.remove('double-clicked');
+        svg.innerHTML = originalSVGContent;
+    }, { once: true });
+}
 
 
 loadHTML('./src/components/user_panel/user_panel.html', userPanel);
 loadHTML('./src/components/footer/footer.html', footer);
 
 loadPage('students_page');
-
-
 
 const avatarDropdownContainer = document.getElementById('avatar_dropdown');
 const avatarDropdownList = avatarDropdownContainer.querySelector('.dropdown-list');
@@ -76,7 +87,6 @@ const messagesDropdownContainer = document.getElementById('messages_dropdown');
 const messagesDropdownList = messagesDropdownContainer.querySelector('.dropdown-list');
 
 function showDropdown(dropdownList) {
-  // If it's in "closing" state, remove that first
   dropdownList.classList.remove('closing');
   dropdownList.classList.add('show-dropdown');
 }
