@@ -1,0 +1,65 @@
+/* Custom checkbox styling - smaller size */
+.custom-checkbox-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+/* Hide the default checkbox */
+.student-checkbox,
+.header-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox - smaller size */
+.custom-checkbox {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: var(--base-clr);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* On hover */
+.student-checkbox:hover+.custom-checkbox,
+.header-checkbox:hover+.custom-checkbox {
+    border-color: var(--accent2-clr);
+    transform: scale(1.05);
+}
+
+/* When the checkbox is checked */
+.student-checkbox:checked+.custom-checkbox,
+.header-checkbox:checked+.custom-checkbox {
+    background-color: var(--accent2-clr);
+    border-color: var(--accent2-clr);
+}
+
+.student-checkbox:checked+.custom-checkbox::after,
+.header-checkbox:checked+.custom-checkbox::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Focused checkbox */
+.student-checkbox:focus+.custom-checkbox,
+.header-checkbox:focus+.custom-checkbox {
+    box-shadow: 0 0 0 2px var(--accent2-clr-t);
+}

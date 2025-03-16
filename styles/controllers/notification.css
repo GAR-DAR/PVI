@@ -1,0 +1,67 @@
+/* -----------------------------------------------------------------------------Notification system styles */
+/* Notification system */
+.notification {
+    position: fixed;
+    bottom: -100px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: var(--base-clr);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    z-index: 1050;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.notification-show {
+    transform: translateY(-120px);
+    opacity: 1;
+}
+
+.notification-hide {
+    transform: translateY(0);
+    opacity: 0;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-message {
+    font-size: 14px;
+    color: var(--text-clr);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-clr);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+.notification-success {
+    border-left: 4px solid var(--accent1-clr);
+}
+
+.notification-info {
+    border-left: 4px solid var(--accent1-clr);
+}

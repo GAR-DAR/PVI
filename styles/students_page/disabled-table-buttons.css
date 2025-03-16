@@ -1,0 +1,36 @@
+/*-----------------------------------------------------------------------------Disablet button for table*/
+/* Disabled button styling */
+
+.ico-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.ico-button:disabled:hover {
+    background-color: transparent;
+}
+
+.ico-button:disabled svg {
+    fill: var(--grey-clr);
+}
+
+/* Active button styling */
+.ico-button:not(:disabled) {
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.ico-button:not(:disabled):hover {
+    background-color: var(--light-hover-clr);
+    transform: scale(1.1);
+}
+
+/* Add a clear visual indicator when buttons are enabled */
+.edit-btn:not(:disabled) svg {
+    fill: var(--accent2-clr);
+}
+
+.delete-btn:not(:disabled) svg {
+    fill: var(--accent1-clr);
+}

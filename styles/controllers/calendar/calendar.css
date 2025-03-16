@@ -1,0 +1,108 @@
+
+/* Base date input styling */
+input[type="date"] {
+    position: relative;
+    padding: 10px 15px;
+    border: 1px solid var(--el-header-clr);
+    border-radius: 50px;
+    background-color: var(--base-clr);
+    color: var(--text-clr);
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 40px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+/* Calendar icon styling */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    opacity: 0.7;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 3px;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23a9a9a9'><path d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z'/></svg>");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    background-color: var(--accent2-clr-t);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Date display styling */
+input[type="date"]::-webkit-datetime-edit {
+    padding: 0 5px;
+    font-size: 14px;
+    color: var(--text-clr);
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    background: transparent;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+    color: var(--text-clr);
+    opacity: 0.8;
+    padding: 0 2px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+    color: var(--text-clr);
+    font-weight: 500;
+}
+
+input[type="date"]:focus::-webkit-datetime-edit-fields-wrapper {
+    color: var(--accent2-clr);
+}
+
+/* Remove spinner buttons */
+input[type="date"]::-webkit-inner-spin-button {
+    display: none;
+}
+
+/* Focus styling */
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent2-clr);
+    box-shadow: 0 0 0 2px var(--accent2-clr-t);
+}
+
+input[type="date"]:invalid {
+    border-color: var(--accent1-clr-t);
+}
+
+input[type="date"]:focus:invalid {
+    box-shadow: 0 0 0 2px var(--accent1-clr-t);
+}
+
+
+
+:root {
+    color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        --calendar-background-color: var(--base2-clr, #2d2d2d);
+        --calendar-border-color: var(--el-header-clr, #444444);
+        --calendar-text-color: var(--text-clr, #e0e0e0);
+        --calendar-header-background: var(--el-header-clr, #3d3d3d);
+        --calendar-header-text: var(--text-clr, #e0e0e0);
+        --calendar-highlight-color: var(--accent2-clr, #4285f4);
+        --calendar-highlight-text: white;
+        --calendar-today-background: var(--accent2-clr-t, rgba(66, 133, 244, 0.3));
+    }
+}

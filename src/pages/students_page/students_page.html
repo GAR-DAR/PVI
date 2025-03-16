@@ -1,6 +1,5 @@
-
-
 <div class="students-div">
+    <!-- Header part -->
     <div style="display: flex; justify-content: space-between;">
         <h2>Students</h2>
         <button class="ico-button-on-light">
@@ -10,69 +9,101 @@
             </svg>
         </button>
     </div>
-    
-    <table>
-        <thead>
-            <tr>
-                <th class="hidden">ID</th>
-                <th>
-                    <input type="checkbox">
-                </th>
-                <th>Group</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Birthday</th>
-                <th>Status</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- js -->
-        </tbody>
-    </table>
 
+    
+    <!-- Table container with min-height -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="hidden">ID</th>
+                    <th>
+                        <input type="checkbox">
+                    </th>
+                    <th>Group</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Birthday</th>
+                    <th>Status</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Your table rows will go here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        
+    
+        <button class="pagination-btn active">1</button>
+        <button class="pagination-btn">2</button>
+        <button class="pagination-btn">3</button>
+        <div class="page-dots">...</div>
+        <button class="pagination-btn">10</button>
+    
+       
+    </div>
+    
 </div>
 
-<div id="modal-overlay" class="modal-overlay">
+    <!-- Add/Edit Student Modal -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="form-title">Add New Student</h2>
+            </div>
+            <div class="modal-body">
+                <form id="student-form">
+                    <input type="hidden" id="student-id">
+                    <div class="form-group">
+                        <label for="group">Group:</label>
+                        <input type="text" id="group" name="group" required>
+                    </div>
+                    <div class="name-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Birthday:</label>
+                        <input type="date" id="birthday" name="birthday" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancel-btn" class="btn btn-danger">Cancel</button>
+                        <button type="submit" id="save-btn" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<div id="delete-modal-overlay" class="modal-overlay">
     <div class="modal-container">
         <div class="modal-header">
-            <h2 id="form-title">Add New Student</h2>
+            <h2 id="delete-modal-title">Delete students</h2>
+           
         </div>
         <div class="modal-body">
-            <form id="student-form">
-                <input type="hidden" id="student-id">
-                <div class="form-group">
-                    <label for="group">Group:</label>
-                    <input type="text" id="group" namste="group" required>
-                </div>
-                <div class="name-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" id="firstName" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" id="lastName" name="lastName" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender:</label>
-                    <select id="gender" name="gender" required>
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="birthday">Birthday:</label>
-                    <input type="date" id="birthday" name="birthday" required>
-                </div>
-                <!-- Status field removed - will be set to offline by default -->
-                <div class="form-actions">
-                    <button type="button" id="cancel-btn" class="btn btn-danger">Cancel</button>
-                    <button type="submit" id="save-btn" class="btn btn-primary">Save</button>
-                </div>
-            </form>
+            <label id="delete-message">Would you like to delete this student?</label>
+            <div class="form-actions">
+                <button type="button" id="delete-cancel-btn" class="btn btn-danger">Cancel</button>
+                <button type="button" id="delete-confirm-btn" class="btn btn-primary">Delete</button>
+            </div>
         </div>
     </div>
 </div>

@@ -1,3 +1,16 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+}
+
+
+.students-div {
+    padding-top: 10px;
+    /* Add a bit of spacing */
+}
+
 .students-div table {
     width: 100%;
     margin: 0px;
@@ -86,5 +99,48 @@
 .status-icon {
     width: 30px;
     height: 30px;
+}
+
+
+/*----------------------------------------------------------------------------Table styling when checkbox checked*/
+
+/* Row selection styling - inner border with box-shadow */
+.students-div tr:has(.student-checkbox:checked) td {
+    position: relative;
+    box-shadow: inset 0 0 0 3px var(--accent2-clr-t);
+}
+
+/* Fix z-index for the whole table to keep it below sidebar */
+.students-div table {
+    position: relative;
+    z-index: 1;
+}
+
+/* Better inner border styling for selected rows */
+.students-div tr:has(.student-checkbox:checked) td {
+    position: relative;
+}
+
+/* Make sure first column with checkbox has no inner border */
+.students-div tr:has(.student-checkbox:checked) td:nth-child(2)::before {
+    display: none;
+}
+
+/* Better inner border styling for selected rows */
+.students-div tr:has(.student-checkbox:checked) td::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Preserve normal hover effects */
+.students-div tr:hover td {
+    background-color: var(--table-hover-clr);
 }
 

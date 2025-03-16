@@ -1,4 +1,4 @@
-/* Modal styles */
+
 .modal-overlay {
     display: none;
     position: fixed;
@@ -38,6 +38,8 @@
     padding: 15px 20px;
     border-radius: 20px 20px 0 0;
     border-bottom: 2px solid var(--accent2-clr);
+    display: flex;
+    justify-content: space-between;
 }
 
 .modal-header h2 {
@@ -90,48 +92,9 @@
     box-shadow: 0 0 0 2px var(--accent1-clr-t);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 
-input[type="date"] {
-    position: relative;
-    padding-right: 40px;
-    
-}
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23a9a9a9'><path d='M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13zM4 6V5h16v1H4zm2 4h5v5H6v-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-size: contain;
-    opacity: 0.7;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 2;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-
-    opacity: 1;
-    background-color: var(--accent2-clr-t);
-}
-
-/* Custom select styling */
 select {
     appearance: none;
     padding-right: 30px;

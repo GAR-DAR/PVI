@@ -3,12 +3,14 @@
 
 //------------------------------------------------------------------------page initialization
 
+
 const page = document.querySelector('.page');
 const userPanel = document.getElementById('user-panel');
 const footer = document.getElementById('footer');
 
 const toggleButton = document.getElementById('toggle-btn'); 
 const sidebar = document.getElementById('sidebar');
+
 
 //------------------------------------------------------------------------page loading
 

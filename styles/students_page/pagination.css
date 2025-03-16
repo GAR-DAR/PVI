@@ -1,0 +1,85 @@
+/* Simple Pagination Container */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20%;
+    padding: 15px 0;
+    gap: 5px;
+}
+
+/* Pagination Button - Base Styles */
+.pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--base-clr);
+    color: var(--text-clr);
+    border: 1px solid var(--el-header-clr);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    user-select: none;
+}
+
+.pagination-btn:hover {
+    background-color: var(--accent2-clr-t);
+    border-color: var(--accent2-clr-t);
+}
+
+.pagination-btn.active {
+    background-color: var(--accent2-clr);
+    color: #fff;
+    border-color: var(--accent2-clr);
+    font-weight: 600;
+}
+
+.pagination-btn:disabled,
+.pagination-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: var(--base-clr);
+    border-color: var(--el-header-clr);
+}
+
+.pagination-btn:disabled:hover,
+.pagination-btn.disabled:hover {
+    background-color: var(--base-clr);
+    transform: none;
+}
+
+/* Navigation Buttons */
+.pagination-btn.nav-btn {
+    background-color: var(--base2-clr);
+}
+
+.pagination-btn.nav-btn:not(.disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    background-color: var(--accent2-clr-t);
+}
+
+/* Page Dots */
+.page-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    color: var(--text-clr);
+    font-weight: bold;
+    user-select: none;
+}
+
+/* Animation for button press */
+.pagination-btn:active:not(.disabled) {
+    transform: scale(0.95);
+}
+
+/* Optional hover effect */
+.pagination-btn:not(.active):not(.disabled):hover {
+    transform: translateY(-2px);
+}

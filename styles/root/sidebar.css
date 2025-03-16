@@ -68,6 +68,11 @@
     overflow: hidden;
 }
 
+/*sidebar stay on top*/
+#sidebar {
+    z-index: 10;
+}
+
 
 .rotate svg:last-child {
     rotate: 180deg;
