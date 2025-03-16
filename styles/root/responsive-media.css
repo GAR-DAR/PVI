@@ -1,0 +1,66 @@
+/* Extra Small devices (phones, 576px and down) */
+@media (max-width: 576px) {
+    .main-content {
+        padding-top: 70px;
+        margin-left: 60px;
+        margin-right: 10px;
+    }
+
+    .students-div h2 {
+        font-size: 1.2rem;
+    }
+
+    .students-div th:nth-child(5),
+    .students-div td:nth-child(5),
+    .students-div th:nth-child(6),
+    .students-div td:nth-child(6) {
+        display: none;
+    }
+
+  
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .main-content {
+        padding-top: 70px;
+        margin-left: 60px;
+        margin-right: 10px;
+    }
+
+    .students-div th:nth-child(4),
+    .students-div td:nth-child(4) {
+        width: 120px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    .main-content {
+        padding-top: 70px;
+        margin-left: 70px;
+        margin-right: 20px;
+       
+    }
+
+}
+
+@media (min-width: 993px) and (max-width: 1200px) {
+    .main-content {
+        margin-left: 7%;
+        margin-right: 4%;
+        padding-top: 70px;
+    }
+   
+}
+
+@media (min-width: 1201px) {
+    .main-content {
+        margin-left: 8%;
+        margin-right: 5%;
+        padding-top: 70px;
+    }
+
+    .students-div h2 {
+        font-size: 1.8rem;
+    }
+}
+

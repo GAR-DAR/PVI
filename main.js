@@ -52,7 +52,7 @@ function loadPage(pageName) {
         });
 }
 
-//------------------------------------------------------------------------helper functions
+//------------------------------------------------------------------------sidebar functions
 
 function selectButton(button) {
     const listItems = document.querySelectorAll('#sidebar ul li');
@@ -67,6 +67,21 @@ function toggleSidebar() {
     sidebar.classList.toggle('close');
     toggleButton.classList.toggle('rotate');
 }
+
+
+function handleResponsiveSidebar() {
+    if (window.innerWidth <= SIDEBAR_BREAKPOINT) {
+        // Close sidebar when screen is smaller than breakpoint
+        if (!sidebar.classList.contains('close')) {
+            sidebar.classList.add('close');
+            toggleButton.classList.add('rotate');
+        }
+    }
+}
+
+window.addEventListener('resize', handleResponsiveSidebar);
+
+//------------------------------------------------------------------------unreaded messages animation
 
 function unreadedMessagesAnimation() {
     const messagesIcon = document.getElementById('messages-button');
@@ -170,3 +185,5 @@ document.getElementById("profile_btn").addEventListener('click', () => {
     loadPage('profile_page');
     selectButton(event.target);
 });
+
+/*-----------------------------------------------------------------------------sidebar toggle button*/

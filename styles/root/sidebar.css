@@ -68,9 +68,8 @@
     overflow: hidden;
 }
 
-/*sidebar stay on top*/
 #sidebar {
-    z-index: 10;
+    z-index: 1000;
 }
 
 
@@ -102,4 +101,24 @@
 }
 
 
+/* Media query for automatically closing sidebar on smaller screens */
+@media screen and (max-width: 768px) {
+    #sidebar {
+        width: 54px;
+        overflow: hidden;
+    }
 
+    #toggle-btn {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    #toggle-btn svg {
+        fill: var(--grey-clr);
+    }
+
+    #toggle-btn svg:last-child {
+        rotate: 180deg !important; /* no matter whether the rotate class applied*/
+    }
+
+}

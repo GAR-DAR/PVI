@@ -59,7 +59,7 @@
 }
 
 .notification-success {
-    border-left: 4px solid var(--accent1-clr);
+    border-left: 4px solid var(--accent2-clr);
 }
 
 .notification-info {

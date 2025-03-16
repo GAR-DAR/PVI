@@ -55,17 +55,3 @@ footer {
     z-index: 1000;
     clip-path: polygon(61% 22%, 80% 12%, 100% 21%, 100% 100%, 0 100%, 0 22%, 30% 7%);
 }
-
-
-
-@media (max-width: 800px) {
-    .main-content {
-        padding-top: 70px;
-        
-        margin-left: 60px;
-        
-        margin-right: 10px;
-      
-    }
-
-}

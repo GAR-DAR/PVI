@@ -2,13 +2,19 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow: hidden;
+
+    max-height: 400px;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
+.table-container::-webkit-scrollbar {
+    display: none;
+}
 
 .students-div {
     padding-top: 10px;
-    /* Add a bit of spacing */
 }
 
 .students-div table {
