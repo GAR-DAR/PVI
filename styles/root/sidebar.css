@@ -36,14 +36,16 @@
     justify-content: flex-end;
 }
 
-#sidebar ul li.active a{
+#sidebar ul li.active a {
     font-weight: bold;
     color: var(--accent2-clr);
     background-color: var(--light-hover-clr);
-    svg{
+    svg {
         fill: var(--accent2-clr);
     }
 }
+
+
 
 #sidebar a{
     border-radius: 2.5em;

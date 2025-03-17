@@ -11,28 +11,33 @@
     </div>
 
     
-    <!-- Table container with min-height -->
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th class="hidden">ID</th>
-                    <th>
-                        <input type="checkbox">
-                    </th>
-                    <th>Group</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Birthday</th>
-                    <th>Status</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Your table rows will go here -->
-            </tbody>
-        </table>
-    </div>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th class="hidden">ID</th>
+            
+                <th scope="col">
+                    <div class="custom-checkbox-container">
+                        <input type="checkbox" id="select-all-students" class="header-checkbox">
+                        <label for="select-all-students" class="custom-checkbox">
+                            <span class="visually-hidden">Select all students</span>
+                        </label>
+                    </div>
+                </th>
+                <th scope="col">Group</th>
+                <th scope="col">Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Birthday</th>
+                <th scope="col">Status</th>
+                <th scope="col">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+    </table>
+</div>
 
     <div class="pagination">
         

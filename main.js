@@ -14,10 +14,6 @@ const sidebar = document.getElementById('sidebar');
 
 //------------------------------------------------------------------------page loading
 
-
-loadHTML('./src/components/user_panel/user_panel.html', userPanel);
-loadHTML('./src/components/footer/footer.html', footer);
-
 loadPage('students_page');
 
 //------------------------------------------------------------------------load code function
@@ -45,7 +41,7 @@ function loadPage(pageName) {
             script.src = `./src/pages/${pageName}/${pageName}.js`;
             script.onload = () => {
                 if (typeof initPage === 'function') {
-                    initPage();
+                    initPage(); //this stuff is taken from other js so it's not an error
                 }
             };
             document.body.appendChild(script);
@@ -68,18 +64,8 @@ function toggleSidebar() {
     toggleButton.classList.toggle('rotate');
 }
 
+toggleButton.addEventListener('click', toggleSidebar);
 
-function handleResponsiveSidebar() {
-    if (window.innerWidth <= SIDEBAR_BREAKPOINT) {
-        // Close sidebar when screen is smaller than breakpoint
-        if (!sidebar.classList.contains('close')) {
-            sidebar.classList.add('close');
-            toggleButton.classList.add('rotate');
-        }
-    }
-}
-
-window.addEventListener('resize', handleResponsiveSidebar);
 
 //------------------------------------------------------------------------unreaded messages animation
 
