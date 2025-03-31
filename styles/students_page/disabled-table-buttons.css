@@ -3,7 +3,7 @@
 
 .ico-button:disabled {
     opacity: 0.4;
-    cursor: not-allowed;
+    
     filter: grayscale(100%);
 }
 

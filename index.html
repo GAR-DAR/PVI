@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="styles/modals/add-student-modal.css">
     <link rel="stylesheet" href="styles/modals/edit-student-modal.css">
     <link rel="stylesheet" href="styles/modals/delete-student-modal.css">
+
+    <link rel="manifest" href="manifest.json" />
     
 
 </head>
@@ -126,7 +128,7 @@
         </div>
     </header>
 
-    <nav id="sidebar">
+    <nav id="sidebar" class="close">
         <ul>
             <li>
                 <button id="toggle-btn"  aria-label="Toggle sidebar" aria-expanded="true">
@@ -178,6 +180,7 @@
 
     <script src="main.js"></script>
     <script src="src/pages/students_page/students_page.js"></script>
+    <script src="src/pages/students_page/students_validation.js"></script>
 </body>
 
 </html>

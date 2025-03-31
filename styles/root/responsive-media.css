@@ -1,5 +1,9 @@
+
+
+
+
 /* Extra Small devices (phones, 576px and down) */
-@media (max-width: 576px) {
+@media (max-width: 660px) {
     .main-content {
         padding-top: 70px;
         margin-left: 60px;
@@ -13,14 +17,15 @@
     .students-div th:nth-child(5),
     .students-div td:nth-child(5),
     .students-div th:nth-child(6),
-    .students-div td:nth-child(6) {
+    .students-div td:nth-child(6)
+    {
         display: none;
     }
 
   
 }
 
-@media (min-width: 577px) and (max-width: 768px) {
+@media (min-width: 661px) and (max-width: 768px) {
     .main-content {
         padding-top: 70px;
         margin-left: 60px;

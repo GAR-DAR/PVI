@@ -25,6 +25,7 @@
                         </label>
                     </div>
                 </th>
+                
                 <th scope="col">Group</th>
                 <th scope="col">Name</th>
                 <th scope="col">Gender</th>
@@ -62,20 +63,23 @@
             <div class="modal-body">
                 <form id="student-form">
                     <input type="hidden" id="student-id">
+                <div class="form-group">
+                    <label for="group">Group:</label>
+                    <input type="text" id="group" name="group" pattern="^[A-Za-z]{2,4}-\d{2,3}$"
+                        title="Format: 2 to 4 letters, a dash, and 2 to 3 digits (e.g., PZ-25 or ABCD-123)" required>
+                </div>
+                <div class="name-row">
                     <div class="form-group">
-                        <label for="group">Group:</label>
-                        <input type="text" id="group" name="group" required>
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" name="firstName" pattern="^[A-Za-z]{2,}$"
+                            title="At least 2 letters, no numbers or special characters" required>
                     </div>
-                    <div class="name-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name:</label>
-                            <input type="text" id="firstName" name="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name:</label>
-                            <input type="text" id="lastName" name="lastName" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" name="lastName" pattern="^[A-Za-z\s]{2,}$"
+                            title="At least 2 letters, spaces allowed, no numbers or special characters" required>
                     </div>
+                </div>
                     <div class="form-group">
                         <label for="gender">Gender:</label>
                         <select id="gender" name="gender" required>

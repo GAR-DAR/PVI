@@ -1,5 +1,19 @@
+// Service Worker Registration - must be at the top of main.js
+if ("serviceWorker" in navigator) {
 
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js") // Note the relative path with ./ instead of /
+      .then(registration => {
+        console.log("Service Worker registered with scope:", registration.scope);
+      })
+      .catch(err => {
+        console.error("Service Worker registration failed:", err);
+      });
+  });
+}
 
+// Use this function instead of loadPage in your code when needed
 
 //------------------------------------------------------------------------page initialization
 
@@ -151,7 +165,6 @@ document.getElementById("tasks-nav").addEventListener('click', () => {
     loadPage('tasks_page');
     selectButton(event.target);
 });
-
 document.getElementById("title-up").addEventListener('click', () => {
     loadPage('students_page');
     selectButton(event.target);
@@ -172,4 +185,3 @@ document.getElementById("profile_btn").addEventListener('click', () => {
     selectButton(event.target);
 });
 
-/*-----------------------------------------------------------------------------sidebar toggle button*/

@@ -1,0 +1,34 @@
+{
+  "name": "keepUp mobile", 
+  "short_name": "keepUp", 
+  "description": "Це прогресивний веб-додаток (PWA) для швидкого та зручного доступу до контенту.",
+  "start_url": "index.html",
+  "scope": "/",
+  "display": "standalone", 
+  "orientation": "portrait-primary", 
+  "background_color": "#00ffff", 
+  "theme_color": "#00ffff",
+
+  "icons": [
+    {
+      "src": "assets/images/icon/icon_128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/icon/icon_192.png", 
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/icon/icon_256.png", 
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/icon/icon_512.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

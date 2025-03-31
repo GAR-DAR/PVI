@@ -26,6 +26,7 @@ function initPage() {
     }
   });
   
+  
   document.getElementById('cancel-btn').addEventListener('click', function() {
     closeModal('modal-overlay');
   });
@@ -36,6 +37,7 @@ function initPage() {
   
   // Set up delete modal event listeners
   setupDeleteModalListeners();
+
 }
 
 function setupDeleteModalListeners() {
@@ -136,14 +138,12 @@ function initializeSampleData() {
 
 //------------------------------------------------------------------------------------------DOM Data Management
 
-// Function to create and add a student row to the table
 function createStudentRow(student) {
   const tbody = document.querySelector('.students-div table tbody');
   if (!tbody) return;
   
   const row = document.createElement('tr');
   
-  // Store all student data as data attributes
   row.dataset.id = student.id;
   row.dataset.group = student.group;
   row.dataset.firstName = student.firstName;
@@ -186,9 +186,8 @@ function createStudentRow(student) {
   tbody.appendChild(row);
 }
 
-// Setup the checkboxes event handlers
 function setupCheckboxListeners() {
-  // Student checkboxes
+ 
   document.querySelectorAll('.student-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', function() {
       const studentId = parseInt(this.dataset.id);
@@ -208,8 +207,7 @@ function setupCheckboxListeners() {
           headerCheckbox.checked = false;
         }
       }
-      
-      // Update buttons state based on selection
+    
       updateActionButtonsState();
     });
   });
@@ -262,18 +260,21 @@ function setupHeaderCheckbox() {
 
 // Update action buttons state (enabled/disabled) based on selection
 function updateActionButtonsState() {
-  // Don't update buttons if a delete confirmation is active
+  
+
   if (deleteConfirmationActive) return;
   
   const editButtons = document.querySelectorAll('.edit-btn');
   const deleteButtons = document.querySelectorAll('.delete-btn');
   
-  if (selectedStudents.length === 0) {
-    // No selection - disable all buttons
-    editButtons.forEach(btn => btn.disabled = true);
+  if (selectedStudents.length === 0) { // No selection - disable all buttons
+
+    
+    editButtons.forEach(btn => btn.disabled = true);  
     deleteButtons.forEach(btn => btn.disabled = true);
-  } else if (selectedStudents.length === 1) {
-    // Single selection - enable edit and delete for selected student
+
+  } else if (selectedStudents.length === 1) {  // Single selection - enable edit and delete for selected student
+   
     const selectedId = selectedStudents[0];
     
     editButtons.forEach(btn => {
@@ -285,8 +286,8 @@ function updateActionButtonsState() {
       const btnId = parseInt(btn.dataset.id);
       btn.disabled = btnId !== selectedId;
     });
-  } else {
-    // Multiple selection - disable edit buttons, enable delete buttons for selected students
+  } else {  // Multiple selection - disable edit buttons, enable delete buttons for selected students
+    
     editButtons.forEach(btn => btn.disabled = true);
     
     deleteButtons.forEach(btn => {
@@ -311,12 +312,10 @@ function getStudentById(id) {
   };
 }
 
-// Update a student in the DOM
 function updateStudent(student) {
   const row = document.querySelector(`.students-div table tbody tr[data-id="${student.id}"]`);
   if (!row) return false;
   
-  // Update data attributes
   row.dataset.group = student.group;
   row.dataset.firstName = student.firstName;
   row.dataset.lastName = student.lastName;
@@ -339,7 +338,6 @@ function updateStudent(student) {
   return true;
 }
 
-// Setup event listeners for table
 function addActionButtonListeners() {
   // Edit button listeners
   document.querySelectorAll('.edit-btn').forEach(button => {
@@ -359,22 +357,19 @@ function addActionButtonListeners() {
       const studentId = parseInt(this.getAttribute('data-id'));
       
       if (selectedStudents.length > 1) {
-        // If multiple students are selected, delete all selected
         deleteMultipleStudents();
       } else {
-        // Delete single student
         deleteStudent(studentId);
       }
     });
   });
   
-  // Setup checkbox listeners for new rows
   setupCheckboxListeners();
 }
 
 //------------------------------------------------------------------------------------------Modal form
 
-// Add modal form
+// Add modal 
 function addStudent() {
   editingStudent = null; // Clear any existing editing student
   
@@ -410,6 +405,11 @@ function editStudent(studentId) {
 }
 
 function saveStudentData() {
+  // Run our custom validation
+  if (!validateStudentForm()) {
+    return false; // Stop form submission if validation fails
+  }
+  
   const studentIdInput = document.getElementById('student-id');
   const groupInput = document.getElementById('group');
   const firstNameInput = document.getElementById('firstName');
@@ -430,19 +430,19 @@ function saveStudentData() {
     status: editingStudent ? editingStudent.status : 'offline'
   };
   
-  if (studentIdInput.value) {
-    // Update existing student
+ console.log('Student data:\n' + JSON.stringify(student, null, 2));
+
+  if (studentIdInput.value) {  // Update existing student
     updateStudent(student);
     showNotification(`Student ${student.firstName} ${student.lastName} updated successfully`, 'success');
-  } else {
-    // Add new student
+  } else { // Add new student
     createStudentRow(student);
-    // Add listeners to the new row's buttons and checkbox
     addActionButtonListeners();
     showNotification(`Student ${student.firstName} ${student.lastName} added successfully`, 'success');
   }
   
   closeModal('modal-overlay');
+  return true;
 }
 
 // Modal help functions
@@ -456,7 +456,6 @@ function closeModal(modalId) {
 
 //------------------------------------------------------------------------------------------Delete functionality
 
-// Function to delete a single student
 function deleteStudent(studentId) {
   const student = getStudentById(studentId);
   if (student) {
@@ -467,7 +466,6 @@ function deleteStudent(studentId) {
   }
 }
 
-// Function to delete multiple students
 function deleteMultipleStudents() {
   if (selectedStudents.length === 0) return;
 
@@ -497,7 +495,6 @@ function removeStudent(id) {
 //------------------------------------------------------------------------------------------Notifications
 
 function showNotification(message, type = 'info') {
-  // Create notification element
   const notification = document.createElement('div');
   notification.className = `notification notification-${type}`;
   notification.innerHTML = `
@@ -505,7 +502,7 @@ function showNotification(message, type = 'info') {
       <div class="notification-icon">
         ${type === 'success'
           ? '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--accent2-clr)"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>'
-          : '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--alert-clr)"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>'}
+          : '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--accent1-clr)"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>'}
       </div>
       <div class="notification-message">${message}</div>
     </div>
@@ -519,7 +516,7 @@ function showNotification(message, type = 'info') {
   // Add it to the DOM
   document.body.appendChild(notification);
   
-  // Add event listener to close button
+  // event listener to close button
   notification.querySelector('.notification-close').addEventListener('click', () => {
     notification.classList.add('notification-hide');
     setTimeout(() => notification.remove(), 300);
@@ -532,7 +529,7 @@ function showNotification(message, type = 'info') {
     }
   }, 4000);
   
-  // Animate in
+  // Animation
   setTimeout(() => {
     notification.classList.add('notification-show');
   }, 10);
