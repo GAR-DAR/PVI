@@ -1,9 +1,9 @@
-// Service Worker Registration - must be at the top of main.js
+
 if ("serviceWorker" in navigator) {
 
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./sw.js") // Note the relative path with ./ instead of /
+      .register("./sw.js") 
       .then(registration => {
         console.log("Service Worker registered with scope:", registration.scope);
       })
@@ -183,5 +183,6 @@ document.getElementById("messages-button").addEventListener('dblclick', () => {
 document.getElementById("profile_btn").addEventListener('click', () => {
     loadPage('profile_page');
     selectButton(event.target);
+    hideDropdown(avatarDropdownList);
 });
 

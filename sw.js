@@ -1,14 +1,11 @@
-// Relative paths helper - this is key for mobile compatibility
 const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '');
 
-// Cache name with version
 const CACHE_NAME = "keepup-cache-v2";
 
-// Convert all absolute paths to relative paths for better compatibility
 const ASSETS = [
-    "./",                                      // Root (relative)
-    "./index.html",                           // Main HTML file (relative)
-    "./main.js",                               // Main JavaScript file
+    "./",                                      
+    "./index.html",                           
+    "./main.js",                               
     
     // CSS files - root styles
     "./styles/page.css",                   
@@ -68,11 +65,9 @@ const ASSETS = [
     "./manifest.json"
 ];
 
-// Installation event - cache all resources immediately
 self.addEventListener("install", (event) => {
   console.log("Service Worker: Installing...");
   
-  // Force activation without waiting
   self.skipWaiting();
   
   event.waitUntil(
@@ -80,7 +75,8 @@ self.addEventListener("install", (event) => {
       console.log("Service Worker: Caching all resources");
       return cache.addAll(ASSETS).catch(error => {
         console.error("Cache add error:", error);
-        // Try individual caching if the batch fails
+
+        // individual caching if the batch fails
         return Promise.all(
           ASSETS.map(asset => cache.add(asset).catch(e => console.warn(`Failed to cache: ${asset}`)))
         );
@@ -89,13 +85,12 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// Activation event - clear old caches and take control
 self.addEventListener("activate", (event) => {
   console.log("Service Worker: Activating...");
   
   event.waitUntil(
     Promise.all([
-      // Remove old caches
+     
       caches.keys().then(keyList => {
         return Promise.all(
           keyList.map(key => {

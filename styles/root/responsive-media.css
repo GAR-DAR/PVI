@@ -22,6 +22,25 @@
         display: none;
     }
 
+    /* Sidebar responsiveness for very small screens */
+    #sidebar {
+        width: 54px;
+        overflow: hidden;
+    }
+
+    #toggle-btn {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    #toggle-btn svg {
+        fill: var(--grey-clr);
+    }
+
+    #toggle-btn svg:last-child {
+        rotate: 180deg !important; /* no matter whether the rotate class applied */
+    }
+
   
 }
 
