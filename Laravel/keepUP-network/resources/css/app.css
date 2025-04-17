@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root styles */
+@import './root/sidebar.css';
+@import './root/root.css';
+@import './root/colors.css';
+@import './root/user-panel.css';
+@import './root/responsive-media.css';
+
+@import './controllers/images.css';
+@import './controllers/buttons.css';
+@import './controllers/checkbox.css';
+@import './controllers/messages.css';
+@import './controllers/notification.css';
+@import './controllers/calendar/calendar.css';
+
+@import './page.css';
+@import './students_page/pagination.css';
+@import './students_page/students-table.css';
+@import './students_page/disabled-table-buttons.css';
+
+@import './modals/general-modals.css';
+@import './modals/add-student-modal.css';
+@import './modals/edit-student-modal.css';
+@import './modals/delete-student-modal.css';
