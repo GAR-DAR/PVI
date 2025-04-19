@@ -94,4 +94,7 @@
 
         </div>
 
+        @include('modals.student-modal')
+        @include('modals.delete-student-modal')
+
 </x-layout>

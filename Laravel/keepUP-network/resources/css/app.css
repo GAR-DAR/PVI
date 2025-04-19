@@ -22,6 +22,4 @@
 @import './students_page/disabled-table-buttons.css';
 
 @import './modals/general-modals.css';
-@import './modals/add-student-modal.css';
-@import './modals/edit-student-modal.css';
 @import './modals/delete-student-modal.css';

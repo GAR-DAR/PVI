@@ -163,8 +163,9 @@
     @vite([
 
     'resources/js/main.js',
-    'resources/js/students_page.js',
-    'resources/js/students_validation.js'
+    'resources/js/students/students.js',
+    'resources/js/students/validation.js'
+    
     ])
 
 

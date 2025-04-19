@@ -9,9 +9,12 @@ export default defineConfig({
                 
                 'resources/js/app.js',
                 'resources/js/main.js',
-                'resources/js/students_page.js',
-                'resources/js/students_validation.js',
 
+
+                //students
+                'resources/js/students/studets.js',
+                'resources/js/students/validation.js',
+                
 
 
 
@@ -34,12 +37,12 @@ export default defineConfig({
                 // Page styles 
                 'resources/css/page.css',
                 'resources/css/students_page/pagination.css',
+                'resources/css/students_page/general-modals.css',
                 'resources/css/students_page/students-table.css',
                 'resources/css/students_page/disabled-table-buttons.css',
                 // Modal styles
-                'resources/css/modals/add-student-modal.css',
-                'resources/css/modals/edit-student-modal.css',
                 'resources/css/modals/delete-student-modal.css'
+
             ],
             refresh: true,
         }),
