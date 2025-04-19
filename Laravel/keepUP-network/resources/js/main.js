@@ -26,41 +26,10 @@ const toggleButton = document.getElementById('toggle-btn');
 const sidebar = document.getElementById('sidebar');
 
 
-//------------------------------------------------------------------------page loading
-
-loadPage('students_page');
 
 //------------------------------------------------------------------------load code function
 
-function loadHTML(url, element) {
-    return fetch(url)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`Failed to load ${url}`);
-            }
-            return res.text();
-        })
-        .then(htmlSnippet => {
-            element.innerHTML = htmlSnippet;
-        })
-        .catch(err => {
-            console.error(err);
-        });
-}
 
-function loadPage(pageName) {
-    loadHTML(`./src/pages/${pageName}/${pageName}.html`, page)
-        .then(() => {
-            const script = document.createElement('script');
-            script.src = `./src/pages/${pageName}/${pageName}.js`;
-            script.onload = () => {
-                if (typeof initPage === 'function') {
-                    initPage(); //this stuff is taken from other js so it's not an error
-                }
-            };
-            document.body.appendChild(script);
-        });
-}
 
 //------------------------------------------------------------------------sidebar functions
 
@@ -152,26 +121,27 @@ document.addEventListener('click', (event) => {
 //------------------------------------------------------------------------page navigation event listeners
 
 document.getElementById("dashboard-nav").addEventListener('click', () => {
-    loadPage('dashboard_page');
-    selectButton(event.target);
+
+     window.location.href = '/dashboard';
+     selectButton(event.target);
 });
 
 document.getElementById("students-nav").addEventListener('click', () => {
-    loadPage('students_page');
+   window.location.href = '/students';
     selectButton(event.target);
 });
 
 document.getElementById("tasks-nav").addEventListener('click', () => {
-    loadPage('tasks_page');
+    window.location.href = '/tasks';
     selectButton(event.target);
 });
 document.getElementById("title-up").addEventListener('click', () => {
-    loadPage('students_page');
+    window.location.href = '/dashboard';
     selectButton(event.target);
 });
 
 document.getElementById("messages-button").addEventListener('click', () => {
-    loadPage('chat_page');
+    window.location.href = '/chats';
     selectButton(event.target);
     hideDropdown(messagesDropdownList);
 });
@@ -181,7 +151,7 @@ document.getElementById("messages-button").addEventListener('dblclick', () => {
 });
 
 document.getElementById("profile_btn").addEventListener('click', () => {
-    loadPage('profile_page');
+    window.location.href = '/profile';
     selectButton(event.target);
     hideDropdown(avatarDropdownList);
 });
