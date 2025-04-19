@@ -6,12 +6,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [StudentsController::class, 'index']);
 
 
-Route::get('/students', [StudentsController::class, 'index']);
-Route::post('/students', [StudentsController::class, 'store']);
-Route::get('/students/{student}', [StudentsController::class, 'show']);
-Route::put('/students/{student}', [StudentsController::class, 'update']);
-Route::delete('/students/{student}', [StudentsController::class, 'destroy']);
-Route::delete('/students/bulk-delete', [StudentsController::class, 'bulkDestroy']);
+Route::get('/students', [StudentsController::class, 'index'])->name('students.index');
+
+Route::get('/students/create', [StudentsController::class, 'create'])->name('students.create');
+
+Route::post('/students', [StudentsController::class, 'store'])->name('students.store');
+
+Route::get('/students/{student}/edit', [StudentsController::class, 'edit'])->name('students.edit');
+Route::put('/students/{student}', [StudentsController::class, 'update'])->name('students.update');
+Route::delete('/students/{student}', [StudentsController::class, 'destroy'])->name('students.destroy');
+
 
 
 Route::get('/dashboard', function () {

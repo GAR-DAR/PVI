@@ -6,29 +6,12 @@ let pendingDeleteId = null;
 document.addEventListener('DOMContentLoaded', initPage);
 
 function initPage() {
-  const addButton = document.querySelector('.ico-button-on-light');
-  if (addButton) {
-    addButton.addEventListener('click', addStudent);
-  }
-  
-  document.getElementById('save-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    if (document.getElementById('student-form').checkValidity()) { 
-      saveStudentData();
-    }
-  });
-  
-  document.getElementById('cancel-btn').addEventListener('click', function() {
-    closeModal('modal-overlay');
-  });
 
-  // Set up table row buttons and make sure they start disabled
+
   setupTableRowButtons();
   
-  // Set up checkbox selection system
   setupSelectionSystem();
   
-  // Initially disable all action buttons
   updateActionButtonStates();
 }
 
@@ -173,9 +156,6 @@ function addActionButtonListeners() {
 //------------------------------------------------------------------------------ Students Action Functions
 
 function editStudent(studentId) {
-
-
-
 
   alert(`Edit student with ID: ${studentId}`);
 }
