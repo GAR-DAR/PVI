@@ -14,6 +14,7 @@ export default defineConfig({
                 //students
                 'resources/js/students/studets.js',
                 'resources/js/students/validation.js',
+                'resources/js/notifications.js',
                 
 
 

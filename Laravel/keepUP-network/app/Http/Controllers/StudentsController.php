@@ -13,7 +13,7 @@ class StudentsController extends Controller
     public function index()
     {
         // Use eager loading with the "with" method to load related models
-        $students = Students::with(['gender', 'status'])->paginate(8);
+        $students = Students::with(['gender', 'status'])->paginate(9);
 
         // Also get all genders and statuses for any dropdowns you might need
         $genders = Gender::all();
@@ -85,24 +85,35 @@ class StudentsController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified student.
-     *
-     * @param Students $student
-     * @return \Illuminate\Http\Response
-     */
+
+
+   
+    public function confirmDelete(Students $student)
+    {
+        return view('students.destroy', compact('student'));
+    }
+
+   
+    public function destroy(Students $student)
+    {
+        $name = $student->first_name . ' ' . $student->last_name;
+        $student->delete();
+
+        return redirect()->route('students.index')
+            ->with('success', "Student {$name} has been deleted successfully");
+    }
+
+   
     public function edit(Students $student)
     {
+        // Get genders and statuses for the form dropdowns
         $genders = Gender::all();
         $statuses = Status::all();
 
-        return view('students.edit', [
-            'student' => $student,
-            'genders' => $genders,
-            'statuses' => $statuses
-        ]);
+        return view('students.edit', compact('student', 'genders', 'statuses'));
     }
 
+    
     public function update(Request $request, Students $student)
     {
         // Validate form data
@@ -114,16 +125,16 @@ class StudentsController extends Controller
             'birthday' => 'required|date|before_or_equal:today',
             'email' => 'required|email|unique:students,email,' . $student->id,
             'status_id' => 'required|exists:statuses,id',
+            'password' => 'nullable|min:6',
         ]);
 
-        // If validation fails, redirect back with errors and input
         if ($validator->fails()) {
             return redirect()->route('students.edit', $student)
                 ->withErrors($validator)
                 ->withInput();
         }
 
-        // Update the student
+        // Update student data
         $student->update([
             'group_name' => $request->group,
             'first_name' => $request->first_name,
@@ -134,7 +145,7 @@ class StudentsController extends Controller
             'status_id' => $request->status_id,
         ]);
 
-        // Update password if provided
+        // Only update password if provided
         if ($request->filled('password')) {
             $student->update([
                 'password' => bcrypt($request->password)
@@ -144,15 +155,5 @@ class StudentsController extends Controller
         return redirect()->route('students.index')
             ->with('success', 'Student updated successfully');
     }
-
-
-    public function destroy(Students $student)
-    {
-        $student->delete();
-
-        return redirect()->route('students.index')
-            ->with('success', 'Student deleted successfully');
-    }
-  
 
 }

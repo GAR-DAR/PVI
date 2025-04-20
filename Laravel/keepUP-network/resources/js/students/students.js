@@ -15,6 +15,8 @@ function initPage() {
   updateActionButtonStates();
 }
 
+/*
+
 function setupSelectionSystem() {
   // Set up "select all" checkbox in the table header
   const selectAllCheckbox = document.getElementById('select-all-students');
@@ -185,3 +187,4 @@ function closeModal(modalId) {
   document.getElementById(modalId).style.display = 'none';
 }
 
+*/

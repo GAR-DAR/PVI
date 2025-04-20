@@ -8,9 +8,10 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.7);
     /* all the window background made darker */
-    z-index: 1000;
+    z-index: 1500;
     justify-content: center;
     align-items: center;
+    
 }
 
 .modal-container {

@@ -58,18 +58,28 @@
                              </td>
 
 
-                             <td>
-                                 <div class="options">
-                                     <button class="ico-button edit-btn" data-student-id="{{ $student->id }}" aria-label="Edit {{ $student->first_name }} {{ $student->last_name }}">
-                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-clr)">
-                                             <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" /></svg>
-                                     </button>
-                                     <button class="ico-button delete-btn" data-student-id="{{ $student->id }}" aria-label="Delete {{ $student->first_name }} {{ $student->last_name }}">
+                            <td>
+                                <div class="options">
+                                   <button class="ico-button edit-btn" data-student-id="{{ $student->id }}" aria-label="Edit {{ $student->first_name }} {{ $student->last_name }}" onclick="window.location.href='{{ route('students.edit', $student->id) }}'">
+                                       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-clr)">
+                                           <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                                       </svg>
+                                   </button>
+
+                                    
+                                    <button class="ico-button delete-btn" data-student-id="{{ $student->id }}" aria-label="Delete {{ $student->first_name }} {{ $student->last_name }}" onclick="window.location.href='{{ route('students.confirm-delete', $student->id) }}'">
                                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--alert-clr)">
-                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" /></svg>
-                                     </button>
-                                 </div>
-                             </td>
+                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                         </svg>
+                                    </button>
+
+
+
+                                    </form>
+                                </div>
+                            </td>
+
+
 
                         </tr>
                         @empty
@@ -88,8 +98,5 @@
 
 
         </div>
-
-        @include('modals.student-modal')
-        @include('modals.delete-student-modal')
 
 </x-layout>

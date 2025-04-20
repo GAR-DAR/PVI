@@ -164,7 +164,8 @@
 
     'resources/js/main.js',
     'resources/js/students/students.js',
-    'resources/js/students/validation.js'
+    'resources/js/students/validation.js',
+    'resources/js/notifications.js',
     
     ])
 
