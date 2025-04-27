@@ -15,7 +15,6 @@ function initPage() {
   updateActionButtonStates();
 }
 
-/*
 
 function setupSelectionSystem() {
   // Set up "select all" checkbox in the table header
@@ -158,28 +157,23 @@ function addActionButtonListeners() {
 //------------------------------------------------------------------------------ Students Action Functions
 
 function editStudent(studentId) {
-
-  alert(`Edit student with ID: ${studentId}`);
+  
 }
 
 function deleteStudent(studentId) {
-  // Placeholder function for deleting a single student
-  alert(`Delete student with ID: ${studentId}`);
+ 
 }
 
 function deleteMultipleStudents() {
-  // Placeholder function for deleting multiple students
-  alert(`Deleting multiple students: ${selectedStudents.join(', ')}`);
+  
 }
 
 function addStudent() {
-  // Placeholder function - can be implemented later
-  alert('Add student functionality will go here');
+ 
 }
 
 function saveStudentData() {
-  // Placeholder function - can be implemented later
-  alert('Save student data functionality will go here');
+  
 }
 
 function closeModal(modalId) {
@@ -187,4 +181,3 @@ function closeModal(modalId) {
   document.getElementById(modalId).style.display = 'none';
 }
 
-*/

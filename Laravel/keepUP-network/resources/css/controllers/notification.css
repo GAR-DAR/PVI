@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    z-index: 1050;
+    z-index: 1500;
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 0;
 }
