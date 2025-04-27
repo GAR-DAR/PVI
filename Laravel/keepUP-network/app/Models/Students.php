@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Testing\Fluent\Concerns\Has;
 
-class Students extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class Students extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'students';
 
@@ -24,6 +29,11 @@ class Students extends Model
         'password',
         'avatar_path',
         'last_login'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     public function gender()
