@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Gender;
 use App\Models\Status;
 use App\Models\Students;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
@@ -36,7 +38,7 @@ class StudentsController extends Controller
             'statuses' => $statuses
         ]);
     }
-    
+
     public function store(Request $request)
     {
         // Validate form data
@@ -85,15 +87,11 @@ class StudentsController extends Controller
         ]);
     }
 
-
-
-   
     public function confirmDelete(Students $student)
     {
         return view('students.destroy', compact('student'));
     }
 
-   
     public function destroy(Students $student)
     {
         $name = $student->first_name . ' ' . $student->last_name;
@@ -103,7 +101,6 @@ class StudentsController extends Controller
             ->with('success', "Student {$name} has been deleted successfully");
     }
 
-   
     public function edit(Students $student)
     {
         // Get genders and statuses for the form dropdowns
@@ -113,7 +110,6 @@ class StudentsController extends Controller
         return view('students.edit', compact('student', 'genders', 'statuses'));
     }
 
-    
     public function update(Request $request, Students $student)
     {
         // Validate form data
@@ -156,4 +152,80 @@ class StudentsController extends Controller
             ->with('success', 'Student updated successfully');
     }
 
+    // Methods for profile completion and management
+    public function editOwnProfile()
+    {
+        // Get the student record for the authenticated user
+        $student = Students::where('email', Auth::user()->email)->first();
+
+        if (!$student) {
+            return redirect()->route('profile.complete');
+        }
+
+        // Get genders and statuses for the form dropdowns
+        $genders = Gender::all();
+        $statuses = Status::all();
+
+        return view('students.edit', compact('student', 'genders', 'statuses'));
+    }
+
+    public function updateOwnProfile(Request $request)
+    {
+        // Get the student record for the authenticated user
+        $student = Students::where('email', Auth::user()->email)->first();
+
+        // Get the User model instance
+        $user = User::where('email', Auth::user()->email)->first();
+
+        if (!$student) {
+            return redirect()->route('profile.complete');
+        }
+
+        // Validate form data
+        $validator = Validator::make($request->all(), [
+            'group' => 'required|string|max:10',
+            'first_name' => 'required|string|min:2|max:50',
+            'last_name' => 'required|string|min:2|max:50',
+            'gender_id' => 'required|exists:genders,id',
+            'birthday' => 'required|date|before_or_equal:today',
+            'password' => 'nullable|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('profile.edit')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Update student data
+        $student->update([
+            'group_name' => $request->group,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'gender_id' => $request->gender_id,
+            'birthday' => $request->birthday,
+        ]);
+
+        // Only update password if provided
+        if ($request->filled('password')) {
+            $student->update([
+                'password' => bcrypt($request->password)
+            ]);
+
+            // Update the auth user password too
+            if ($user) {
+                $user->password = bcrypt($request->password);
+                $user->save();
+            }
+        }
+
+        // Update the user's name in Auth
+        if ($user) {
+            $user->name = $request->first_name . ' ' . $request->last_name;
+            $user->save();
+        }
+
+        return redirect()->route('profile')
+            ->with('success', 'Your profile has been updated successfully');
+    }
 }

@@ -17,11 +17,6 @@
                         <input type="password" id="password" name="password" required>
                     </div>
 
-                    <div class="form-group checkbox-group">
-                        <input type="checkbox" id="remember" name="remember" class="form-checkbox">
-                        <label for="remember" class="checkbox-label">Remember me</label>
-                    </div>
-
                     <div class="form-actions">
                         <a href="{{ route('register') }}" class="btn btn-secondary">Create Account</a>
                         <button type="submit" class="btn btn-primary">Login</button>
