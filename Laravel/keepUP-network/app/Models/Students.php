@@ -19,8 +19,10 @@ class Students extends Model
         'gender_id',
         'birthday',
         'status_id',
+        'role_id',
         'email',
         'password',
+        'avatar_path',
         'last_login'
     ];
 
@@ -33,4 +35,10 @@ class Students extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
 }

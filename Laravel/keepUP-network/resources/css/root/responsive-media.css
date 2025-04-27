@@ -14,10 +14,12 @@
         font-size: 1.2rem;
     }
 
-    .students-div th:nth-child(5),
-    .students-div td:nth-child(5),
+    .students-div th:nth-child(4),
+    .students-div td:nth-child(4),
     .students-div th:nth-child(6),
-    .students-div td:nth-child(6)
+    .students-div td:nth-child(6),
+    .students-div th:nth-child(7),
+    .students-div td:nth-child(7)
     {
         display: none;
     }

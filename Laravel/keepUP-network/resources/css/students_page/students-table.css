@@ -61,41 +61,47 @@
 
 .students-div th:nth-child(3),
 .students-div td:nth-child(3) {
-    width: 100px;
+    width: 10px;
     text-align: center;
 }
 
 .students-div th:nth-child(4),
 .students-div td:nth-child(4) {
-    width: 150px;
+    width: 110px;
     text-align: center;
 }
 
 .students-div th:nth-child(5),
 .students-div td:nth-child(5) {
-    width: 100px;
+    width: 170px;
     text-align: center;
 }
 
 .students-div th:nth-child(6),
 .students-div td:nth-child(6) {
-    width: 150px;
+    width: 100px;
     text-align: center;
 }
 
 .students-div th:nth-child(7),
 .students-div td:nth-child(7) {
-    width: 20px;
+    width: 150px;
     text-align: center;
 }
 
 .students-div th:nth-child(8),
 .students-div td:nth-child(8) {
+    width: 20px;
+    text-align: center;
+}
+
+.students-div th:nth-child(9),
+.students-div td:nth-child(9) {
     width: 60px;
     text-align: center;
 }
 
-.students-div td:nth-child(8) .options {
+.students-div td:nth-child(9) .options {
     display: flex;
     justify-content: center;
     align-items: center;
