@@ -5,11 +5,26 @@
                 <h2 id="form-title">Edit Student</h2>
             </div>
             <div class="modal-body">
-                <form id="student-form" method="POST" action="{{ route('students.update', $student->id) }}">
+                <form id="student-form" method="POST" action="{{ route('students.update', $student->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="hidden" id="student-id" name="id" value="{{ $student->id }}">
                     <input type="hidden" id="status_id" name="status_id" value="{{ $student->status_id }}">
+
+                    <!-- Profile Photo Upload Section -->
+                    <div class="profile-photo-section" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <div class="avatar-upload-container" style="position: relative; cursor: pointer;">
+                            <div class="avatar-container" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
+                                <img id="avatar-preview" src="{{ $student->avatar_path ? asset($student->avatar_path) : asset('images/user-sample.png') }}" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="avatar-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.5); border-radius: 50%; opacity: 0; transition: opacity 0.3s;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#ffffff">
+                                    <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+                                </svg>
+                            </div>
+                            <input type="file" id="profile_photo" name="profile_photo" accept="image/jpeg,image/jpg" style="display: none;">
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label for="group">Group:</label>
@@ -52,19 +67,6 @@
                     <div class="form-group">
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" minlength="6" placeholder="Leave blank to keep current password">
-                        <small class="form-text text-muted">Leave blank to keep current password.</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status_id">Status:</label>
-                        <select id="status_id" name="status_id" required>
-                            <option value="">Select Status</option>
-                            @foreach($statuses as $status)
-                            <option value="{{ $status->id }}" {{ old('status_id', $student->status_id) == $status->id ? 'selected' : '' }}>
-                                {{ $status->name }}
-                            </option>
-                            @endforeach
-                        </select>
                     </div>
 
                     <div class="form-actions">
@@ -77,6 +79,41 @@
     </div>
 
     <script>
+        // Avatar upload handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatarContainer = document.querySelector('.avatar-upload-container');
+            const avatarOverlay = document.querySelector('.avatar-overlay');
+            const fileInput = document.getElementById('profile_photo');
+            const avatarPreview = document.getElementById('avatar-preview');
+
+            // Show overlay on hover
+            avatarContainer.addEventListener('mouseenter', function() {
+                avatarOverlay.style.opacity = '1';
+            });
+
+            avatarContainer.addEventListener('mouseleave', function() {
+                avatarOverlay.style.opacity = '0';
+            });
+
+            // Trigger file input click
+            avatarContainer.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // Preview the selected image
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    }
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        });
+
         // Client-side validation before form submission
         document.getElementById('student-form').addEventListener('submit', function(e) {
             let errors = [];
@@ -125,6 +162,20 @@
             const password = document.getElementById('password').value;
             if (password && password.length < 6) {
                 errors.push("Password must be at least 6 characters");
+            }
+
+            // Photo validation (optional)
+            const photo = document.getElementById('profile_photo');
+            if (photo.files.length > 0) {
+                const file = photo.files[0];
+                // Check file type
+                if (!file.type.match('image/jpe?g')) {
+                    errors.push("Profile photo must be a JPG/JPEG image");
+                }
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    errors.push("Profile photo must be less than 2MB");
+                }
             }
 
             // If there are validation errors, prevent form submission and show only the first error

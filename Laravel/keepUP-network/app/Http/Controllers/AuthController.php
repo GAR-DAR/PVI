@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
+use Illuminate\Container\Attributes\Log;
+
 use App\Http\Controllers\StudentsController;
 
 class AuthController extends Controller
@@ -60,7 +62,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Validate all data at once
+        // Validate all data at once including the optional photo
         $request->validate([
             'email' => 'required|string|email|max:255|unique:users,email|unique:students,email',
             'password' => 'required|string|min:8|confirmed',
@@ -70,7 +72,77 @@ class AuthController extends Controller
             'gender_id' => 'required|exists:genders,id',
             'birthday' => 'required|date|before_or_equal:today',
             'status_id' => 'required|exists:statuses,id',
+            'profile_photo' => 'nullable|image|mimes:jpeg,jpg|max:2048',
         ]);
+
+        // Check for existing student with same name and surname
+        $existingStudent = Students::where('first_name', $request->first_name)
+            ->where('last_name', $request->last_name)
+            ->first();
+
+        if ($existingStudent) {
+            return back()->withErrors(['name' => 'A student with this name and surname already exists.'])
+                ->withInput($request->except('password'));
+        }
+
+        // Process profile photo if uploaded
+        $avatarPath = null;
+        if ($request->hasFile('profile_photo') && $request->file('profile_photo')->isValid()) {
+            // Get file and generate filename
+            $file = $request->file('profile_photo');
+            $fileName = strtolower($request->first_name . '_' . $request->last_name . '.jpg');
+
+            // FTP server details
+            $ftpHost = 'ftp.byethost9.com';
+            $ftpUsername = 'b9_38843962';
+            $ftpPassword = 'keepUp'; // Use your actual password here
+            $ftpPath = '/htdocs/students/photos/';
+
+            // Upload file to FTP server
+            try {
+                $ftpConnection = ftp_connect($ftpHost);
+
+                if ($ftpConnection) {
+                    $loggedIn = ftp_login($ftpConnection, $ftpUsername, $ftpPassword);
+
+                    if ($loggedIn) {
+                        // Set passive mode
+                        ftp_pasv($ftpConnection, true);
+
+                        // Create directories if they don't exist
+                        try {
+                            if (!@ftp_chdir($ftpConnection, '/htdocs/students/photos/')) {
+                                if (!@ftp_chdir($ftpConnection, '/htdocs/students/')) {
+                                    ftp_mkdir($ftpConnection, '/htdocs/students');
+                                }
+                                ftp_chdir($ftpConnection, '/htdocs/students/');
+                                ftp_mkdir($ftpConnection, 'photos');
+                            }
+                        } catch (\Exception $e) {
+                            // Directory creation error - continue anyway
+                        }
+
+                        // Upload the file
+                        $tempFile = tempnam(sys_get_temp_dir(), 'ftp');
+                        file_put_contents($tempFile, file_get_contents($file->getRealPath()));
+
+                        if (ftp_put($ftpConnection, $ftpPath . $fileName, $tempFile, FTP_BINARY)) {
+                            // Set the avatar path
+                            $avatarPath = 'http://keepup.byethost9.com/students/photos/' . $fileName;
+                        }
+
+                        // Clean up
+                        unlink($tempFile);
+                        ftp_close($ftpConnection);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Log the error and continue without the photo
+
+                //Log::error('FTP upload error: ' . $e->getMessage());
+                
+            }
+        }
 
         // Create new user in the users table
         $user = User::create([
@@ -89,12 +161,14 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'status_id' => $request->status_id,
+            'avatar_path' => $avatarPath, // Store the avatar path
         ]);
 
-        Auth::login($user);
+        // REMOVE THIS LINE: Auth::login($user);
 
-        return redirect()->route('students.index')
-            ->with('success', 'Account created successfully!');
+        // Redirect to login page with success message
+        return redirect()->route('login')
+            ->with('success', 'Account created successfully! You can now log in.');
     }
 
     public function logout(Request $request)
