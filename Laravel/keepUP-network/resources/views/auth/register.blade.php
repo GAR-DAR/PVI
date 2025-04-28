@@ -92,8 +92,7 @@
                         @enderror
                     </div>
 
-                    <!-- Hidden field for status_id, defaulting to online status (assuming ID 1 is online) -->
-                    <input type="hidden" name="status_id" value="1">
+                    <input type="hidden" name="status_id" value="2">
 
                     <div class="form-actions">
                         <a href="{{ route('login') }}" class="btn btn-secondary">Back to Login</a>

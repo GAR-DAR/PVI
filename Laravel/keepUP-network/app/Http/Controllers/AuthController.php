@@ -40,6 +40,10 @@ class AuthController extends Controller
                 return redirect()->route('profile.complete');
             }
 
+            // Set status to online (ID 1)
+            $student->status_id = 1;
+            $student->save();
+
             return redirect()->intended('/students')
                 ->with('success', 'Welcome back!');
         }
@@ -171,8 +175,18 @@ class AuthController extends Controller
             ->with('success', 'Account created successfully! You can now log in.');
     }
 
+
     public function logout(Request $request)
     {
+        // Set status to offline (ID 2) before logging out
+        if (Auth::check()) {
+            $student = Students::where('email', Auth::user()->email)->first();
+            if ($student) {
+                $student->status_id = 2;
+                $student->save();
+            }
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();

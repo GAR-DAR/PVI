@@ -9,6 +9,7 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" id="student-id" name="id" value="{{ $student->id }}">
+                    
                     <input type="hidden" id="status_id" name="status_id" value="{{ $student->status_id }}">
 
                     <!-- Profile Photo Upload Section -->

@@ -8,8 +8,8 @@
                 <form id="student-form" method="POST" action="{{ route('students.store') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="student-id" name="id">
-                    <!-- Add hidden status_id field with default value 1 for online -->
-                    <input type="hidden" id="status_id" name="status_id" value="1">
+                    
+                    <input type="hidden" id="status_id" name="status_id" value="2">
 
                     <!-- Profile Photo Upload Section -->
                     <div class="profile-photo-section" style="display: flex; justify-content: center; margin-bottom: 20px;">
