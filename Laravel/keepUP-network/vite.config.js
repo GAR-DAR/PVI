@@ -42,7 +42,9 @@ export default defineConfig({
                 'resources/css/students_page/students-table.css',
                 'resources/css/students_page/disabled-table-buttons.css',
                 // Modal styles
-                'resources/css/modals/delete-student-modal.css'
+                'resources/css/modals/delete-student-modal.css',
+
+                'resources/css/profile.css'
 
             ],
             refresh: true,

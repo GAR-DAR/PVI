@@ -147,7 +147,8 @@ class StudentsController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'status_id' => $request->status_id,
-            'avatar_path' => $avatarPath, // Store the avatar path
+            'avatar_path' => $avatarPath, 
+            'role_id' => 1, 
         ]);
 
         // Redirect to students index with success message

@@ -2,14 +2,18 @@
 <x-layout>
     <div class="students-div">
         <div style="display: flex; justify-content: space-between;">
-            <h2>Students</h2>
-            <button class="ico-button-on-light" onclick="window.location.href='{{ route('students.create') }}'">
+             <h2>Students</h2>
+             @php
+             $currentStudent = \App\Models\Students::where('email', Auth::user()->email)->first();
+             @endphp
+             @if(!$currentStudent || $currentStudent->role_id != 2)
+             <button class="ico-button-on-light" onclick="window.location.href='{{ route('students.create') }}'">
+                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                     <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                 </svg>
+             </button>
+             @endif
 
-
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                    <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                </svg>
-            </button>
         </div>
 
 
@@ -34,7 +38,13 @@
                         <th scope="col">Gender</th>
                         <th scope="col">Birthday</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Options</th>
+
+                        @if($currentStudent->role_id == 1)
+                            <th scope="col">Options</th>
+                        @else
+                            <th scope="col" class="hidden"></th>
+                        @endif
+
                     </tr>
                 </thead>
                 <tbody>
@@ -51,9 +61,20 @@
                         </td>
                         <td>
                             <div class="avatar-container">
-                                <img src="{{ $student->avatar_path ? asset($student->avatar_path) : asset('images/user-sample.png') }}" alt="{{ $student->first_name }}'s avatar" class="student-avatar" width="40" height="40">
+                                <a href="{{ route('profile.show', $student->id) }}" class="avatar-link">
+                                    <img src="{{ $student->avatar_path ? asset($student->avatar_path) : asset('images/user-sample.png') }}" alt="{{ $student->first_name }}'s avatar" class="student-avatar" width="40" height="40">
+                                    @if($student->role_id == 1)
+                                    <div class="moderator-badge table-badge" title="Moderator">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="#9966ff">
+                                            <path d="m233-80 65-281L80-550l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
+                                        </svg>
+                                    </div>
+                                    @endif
+                                </a>
                             </div>
                         </td>
+
+
                         <td>{{ $student->group_name }}</td>
                         <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                         <td>{{ $student->gender ? $student->gender->name : 'Unknown' }}</td>
@@ -65,26 +86,31 @@
                         </td>
 
 
+                        @if($currentStudent->role_id == 1)
                         <td>
+                           
                             <div class="options">
+                                <!-- Edit button shown for all students except ID 1 -->
                                 <button class="ico-button edit-btn" data-student-id="{{ $student->id }}" aria-label="Edit {{ $student->first_name }} {{ $student->last_name }}" onclick="window.location.href='{{ route('students.edit', $student->id) }}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--text-clr)">
                                         <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                                     </svg>
                                 </button>
 
-
+                                <!-- Delete button only shown if student is not a moderator (role_id != 2) and current user is not a moderator -->
                                 <button class="ico-button delete-btn" data-student-id="{{ $student->id }}" aria-label="Delete {{ $student->first_name }} {{ $student->last_name }}" onclick="window.location.href='{{ route('students.confirm-delete', $student->id) }}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--alert-clr)">
                                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                     </svg>
                                 </button>
-
-
-
-                                </form>
                             </div>
                         </td>
+                        @else
+                        <td class="hidden"></td>
+                        @endif
+
+
+
 
 
 

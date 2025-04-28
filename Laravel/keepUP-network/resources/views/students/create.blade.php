@@ -8,7 +8,7 @@
                 <form id="student-form" method="POST" action="{{ route('students.store') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="student-id" name="id">
-                    
+
                     <input type="hidden" id="status_id" name="status_id" value="2">
 
                     <!-- Profile Photo Upload Section -->
@@ -173,3 +173,4 @@
 
     </script>
 </x-layout>
+

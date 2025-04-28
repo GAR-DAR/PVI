@@ -4,6 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentsController;
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Students;
+use App\Models\Gender;
+use App\Models\Status;
+use App\Models\Role;
+
 // Public routes
 Route::get('/', function () {
     return view('welcome');
@@ -25,10 +30,16 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Profile route
+    // Profile routes
     Route::get('/profile', function () {
         return view('profile');
     })->name('profile');
+
+    // Show specific student profile
+    Route::get('/profile/{student}', function ($student) {
+        $studentData = Students::with(['gender', 'status', 'role'])->findOrFail($student);
+        return view('profile', ['student' => $studentData]);
+    })->name('profile.show');
 
     // Student routes
     Route::get('/students', [StudentsController::class, 'index'])->name('students.index');

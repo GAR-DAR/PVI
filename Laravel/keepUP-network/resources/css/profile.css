@@ -1,0 +1,138 @@
+ .profile-container {
+     max-width: 800px;
+     margin: 0 auto;
+     padding: 2rem;
+ }
+
+ .profile-header {
+     display: flex;
+     flex-direction: column;
+     margin-bottom: 2rem;
+ }
+
+ .profile-avatar-section {
+     display: flex;
+     align-items: center;
+     margin-top: 1.5rem;
+ }
+
+ .large-avatar-container {
+     position: relative;
+     margin-right: 2rem;
+ }
+
+ .large-avatar {
+     width: 120px;
+     height: 120px;
+     border-radius: 50%;
+     object-fit: cover;
+     border: 3px solid var(--accent-clr);
+ }
+
+ .large-badge {
+     position: absolute;
+     width: 28px;
+     height: 28px;
+     right: 0;
+     bottom: 0;
+     background-color: #1e1e1e;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border: 2px solid var(--bg-clr);
+ }
+
+ .profile-name {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .status-indicator-text {
+     display: flex;
+     align-items: center;
+     margin-top: 0.5rem;
+ }
+
+ .status-dot {
+     width: 10px;
+     height: 10px;
+     border-radius: 50%;
+     margin-right: 8px;
+ }
+
+ .status-dot.online {
+     background-color: var(--green-clr);
+ }
+
+ .status-dot.offline {
+     background-color: var(--grey-clr);
+ }
+
+ .profile-info {
+     margin-bottom: 2rem;
+ }
+
+ .info-card {
+     background-color: var(--bg-secondary);
+     border-radius: 8px;
+     padding: 1.5rem;
+     margin-bottom: 1.5rem;
+ }
+
+ .info-card h4 {
+     margin-top: 0;
+     margin-bottom: 1.5rem;
+     color: var(--text-clr);
+ }
+
+ .info-item {
+     display: flex;
+     margin-bottom: 0.75rem;
+ }
+
+ .info-label {
+     flex: 0 0 120px;
+     font-weight: bold;
+     color: var(--grey-clr);
+ }
+
+ .info-value {
+     color: var(--text-clr);
+ }
+
+ .profile-actions {
+     display: flex;
+     justify-content: flex-end;
+ }
+
+ .btn {
+     padding: 0.5rem 1rem;
+     border-radius: 4px;
+     cursor: pointer;
+     font-weight: 500;
+     transition: background-color 0.2s;
+ }
+
+ .secondary-btn {
+     background-color: transparent;
+     color: var(--accent-clr);
+     border: 1px solid var(--accent-clr);
+ }
+
+ .secondary-btn:hover {
+     background-color: rgba(153, 102, 255, 0.1);
+ }
+
+ /* For avatar link in the students table */
+ .avatar-link {
+     display: block;
+     position: relative;
+     border-radius: 50%;
+     cursor: pointer;
+     transition: transform 0.2s;
+ }
+
+ .avatar-link:hover .student-avatar {
+     box-shadow: 0 0 0 2px var(--accent-clr);
+ }

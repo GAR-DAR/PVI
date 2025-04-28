@@ -23,3 +23,5 @@
 
 @import './modals/general-modals.css';
 @import './modals/delete-student-modal.css';
+
+@import './profile.css';

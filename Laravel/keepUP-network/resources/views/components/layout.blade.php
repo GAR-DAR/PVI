@@ -88,9 +88,17 @@
                  <p class="user-panel-title">{{ $fullName }}</p>
 
                  <div class="dropdown" id="avatar_dropdown">
-                       <button id="profile_btn" class="avatar-button">
-                           <img src="{{ $avatarPath }}" alt="{{ $fullName }}" class="avatar">
-                       </button>
+                     <button id="profile_btn" class="avatar-button">
+                         <img src="{{ $avatarPath }}" alt="{{ $fullName }}" class="avatar">
+                         @if($student && $student->role_id == 1)
+                         <div class="moderator-badge" title="Moderator">
+                             <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#9966ff">
+                                 <path d="m233-80 65-281L80-550l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
+                             </svg>
+                         </div>
+                         @endif
+                     </button>
+
 
 
                      <div class="dropdown-list">
@@ -188,6 +196,10 @@
     <div class="decorative-bottom"></div>
 
      <script>
+
+
+
+
          // Show notification function
          function showNotification(message, type = 'info') {
              const notification = document.createElement('div');

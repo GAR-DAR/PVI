@@ -165,7 +165,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'status_id' => $request->status_id,
-            'avatar_path' => $avatarPath, // Store the avatar path
+            'avatar_path' => $avatarPath, 
+            'role_id' => 1, 
         ]);
 
         // REMOVE THIS LINE: Auth::login($user);
@@ -174,7 +175,6 @@ class AuthController extends Controller
         return redirect()->route('login')
             ->with('success', 'Account created successfully! You can now log in.');
     }
-
 
     public function logout(Request $request)
     {
@@ -194,6 +194,7 @@ class AuthController extends Controller
 
         return redirect('/');
     }
+
 
   
 }
