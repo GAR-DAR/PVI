@@ -1,0 +1,62 @@
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: right;
+    justify-content: right;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.close-btn:hover {
+    background-color: var(--accent2-clr-t);
+    transform: rotate(90deg);
+}
+
+/* Delete confirmation styling */
+.confirmation-message {
+    margin-bottom: 20px;
+    color: var(--text-clr);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Student name highlight in confirmation message */
+.student-name {
+    font-weight: 500;
+    color: var(--accent2-clr);
+}
+
+/* When deleting multiple students */
+.student-list {
+    margin: 15px 0;
+    padding: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: var(--base-clr);
+    border-radius: 10px;
+    border: 1px solid var(--el-header-clr);
+}
+
+.student-list-item {
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    background-color: var(--base2-clr);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.student-list-item:last-child {
+    margin-bottom: 0;
+}
+
+.student-list-item .student-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--accent2-clr);
+}

@@ -1,7 +1,6 @@
 <x-layout>
     <div class="profile-container">
         @if(isset($student))
-        <!-- Profile View for a specific student -->
         <div class="profile-header">
             <h2>Student Profile</h2>
             <div class="profile-avatar-section">
@@ -55,7 +54,6 @@
         </div>
 
         @else
-        <!-- Default profile view if no specific student is provided -->
         <div class="profile-header">
             <h2>My Profile</h2>
             @php

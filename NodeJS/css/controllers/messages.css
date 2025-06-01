@@ -1,0 +1,142 @@
+
+#messages_dropdown .dropdown-list {
+    
+    top: 5.5em;
+    left: -8.3em;
+
+    width: max-content;
+    padding: 2em 1.5em;
+
+    position: absolute;
+    top: 4.5rem;
+    row-gap: 0.4em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/*-------------------Messages <div> template ---------------------*/
+
+#messages_dropdown .message-div{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+    width: 100%;
+}
+
+#messages_dropdown .message-div:hover{
+    background-color: var(--el-hover-clr);
+}
+
+#messages_dropdown .message-div span {
+    background-color: var(--el-base-clr);
+    color: var(--text-clr);
+    padding: 0.5em;
+    border-radius: 1em;
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* In your messages.css or similar */
+.chat-message-item {
+    display: flex;
+    align-items: flex-start;
+    /* Aligns avatar with top of message content */
+    padding: 10px 5px;
+    /* Adjust padding */
+    border-bottom: 1px solid var(--border-clr-light, #efefef);
+    /* Use your theme's border color */
+}
+
+.chat-message-item:last-child {
+    border-bottom: none;
+}
+
+.chat-message-item.system-message .chat-message-body {
+    /* System messages */
+    font-style: italic;
+    color: var(--text-clr-secondary, #6c757d);
+    text-align: center;
+    width: 100%;
+    /* Take full width for centered text */
+    padding: 5px 0;
+}
+
+.chat-avatar-container img.avatar {
+    /* Your existing .avatar class should apply */
+    width: 40px;
+    /* Or your standard avatar size */
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+    /* Prevent avatar from shrinking */
+}
+
+.chat-message-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* Allow message body to take available space */
+}
+
+.chat-author-name {
+    font-weight: bold;
+    color: var(--accent1-clr, #007bff);
+    /* Or your theme's name color */
+    margin-bottom: 4px;
+}
+
+.chat-message-text-content {
+    line-height: 1.5;
+    word-break: break-word;
+    /* Prevent long words from breaking layout */
+    color: var(--text-clr, #333);
+}
+
+.chat-message-media img,
+.chat-message-media video {
+    max-width: 100%;
+    /* Make media responsive within the message bubble */
+    height: auto;
+    /* Maintain aspect ratio */
+    max-height: 250px;
+    /* Limit height */
+    border-radius: var(--el-border-radius-s, 4px);
+    margin-top: 8px;
+    border: 1px solid var(--border-clr, #eee);
+}
+
+.chat-file-info {
+    font-size: 0.8em;
+    color: var(--text-clr-secondary, #777);
+    margin-top: 5px;
+}
+
+.chat-timestamp {
+    font-size: 0.75em;
+    color: var(--text-clr-secondary, #999);
+    margin-top: 6px;
+    align-self: flex-start;
+    /* Keep timestamp aligned with the start of text block */
+}
+
+
+/*
+#messages_dropdown .message-div::after{
+    content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        bottom: 5px;
+        right: 0;
+        left: -2.8px;
+        
+        rotate: 23deg;
+        background-color: var(--light-hover-clr);
+}*/

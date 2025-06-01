@@ -12,7 +12,6 @@
                     
                     <input type="hidden" id="status_id" name="status_id" value="{{ $student->status_id }}">
 
-                    <!-- Profile Photo Upload Section -->
                     <div class="profile-photo-section" style="display: flex; justify-content: center; margin-bottom: 20px;">
                         <div class="avatar-upload-container" style="position: relative; cursor: pointer;">
                             <div class="avatar-container" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
@@ -80,14 +79,12 @@
     </div>
 
     <script>
-        // Avatar upload handling
         document.addEventListener('DOMContentLoaded', function() {
             const avatarContainer = document.querySelector('.avatar-upload-container');
             const avatarOverlay = document.querySelector('.avatar-overlay');
             const fileInput = document.getElementById('profile_photo');
             const avatarPreview = document.getElementById('avatar-preview');
 
-            // Show overlay on hover
             avatarContainer.addEventListener('mouseenter', function() {
                 avatarOverlay.style.opacity = '1';
             });
@@ -96,12 +93,10 @@
                 avatarOverlay.style.opacity = '0';
             });
 
-            // Trigger file input click
             avatarContainer.addEventListener('click', function() {
                 fileInput.click();
             });
 
-            // Preview the selected image
             fileInput.addEventListener('change', function() {
                 if (this.files && this.files[0]) {
                     const reader = new FileReader();
@@ -115,40 +110,35 @@
             });
         });
 
-        // Client-side validation before form submission
         document.getElementById('student-form').addEventListener('submit', function(e) {
             let errors = [];
 
-            // Group validation
             const group = document.getElementById('group').value;
             const groupRegex = /^[A-Z]{2}-\d{1,2}$/;
             if (!groupRegex.test(group)) {
                 errors.push("Group must be in format XX-## (e.g., PZ-25)");
             }
 
-            // First name validation
             const firstName = document.getElementById('first_name').value;
             const firstNameRegex = /^[A-Za-z]{2,}$/;
             if (!firstNameRegex.test(firstName)) {
                 errors.push("First name should contain at least 2 letters (no numbers or special characters)");
             }
 
-            // Last name validation
             const lastName = document.getElementById('last_name').value;
             const lastNameRegex = /^[A-Za-z\s]{2,}$/;
             if (!lastNameRegex.test(lastName)) {
                 errors.push("Last name should contain at least 2 letters (spaces allowed, no numbers or special characters)");
             }
 
-            // Birthday validation
             const birthday = document.getElementById('birthday').value;
             if (birthday) {
                 const birthDate = new Date(birthday);
                 const today = new Date();
                 const minDate = new Date();
                 const maxDate = new Date();
-                minDate.setFullYear(today.getFullYear() - 100); // Max 100 years old
-                maxDate.setFullYear(today.getFullYear() - 18); // Min 18 years old
+                minDate.setFullYear(today.getFullYear() - 100); 
+                maxDate.setFullYear(today.getFullYear() - 18); 
 
                 if (birthDate > today) {
                     errors.push("Birthday cannot be in the future");
@@ -159,27 +149,22 @@
                 }
             }
 
-            // Password validation - only if a new password is provided
             const password = document.getElementById('password').value;
             if (password && password.length < 6) {
                 errors.push("Password must be at least 6 characters");
             }
 
-            // Photo validation (optional)
             const photo = document.getElementById('profile_photo');
             if (photo.files.length > 0) {
                 const file = photo.files[0];
-                // Check file type
                 if (!file.type.match('image/jpe?g')) {
                     errors.push("Profile photo must be a JPG/JPEG image");
                 }
-                // Check file size (max 2MB)
                 if (file.size > 2 * 1024 * 1024) {
                     errors.push("Profile photo must be less than 2MB");
                 }
             }
 
-            // If there are validation errors, prevent form submission and show only the first error
             if (errors.length > 0) {
                 e.preventDefault();
                 showNotification(errors[0], 'info');

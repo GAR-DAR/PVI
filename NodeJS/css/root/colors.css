@@ -1,0 +1,41 @@
+:root {
+
+    /*Background Colors*/
+    --base-clr: #18181C;
+    --base2-clr: #222228;
+
+    /*Text Colors*/
+    --text-clr: white;
+    --light-text-clr: #45454b;
+
+    /*Selection Colors*/
+    
+    --light-hover-clr:#3d3d44;
+    --dark-hover-clr:#222228;
+
+    /*Table Colors*/
+    --table-base-clr: #313137;
+    --table-header-clr: #3d3d44;
+    --table-hover-clr: #2c2c31;
+
+    /*Element Colors*/
+    --el-base-clr: #313137;
+    --el-header-clr: #3d3d44;
+    --el-hover-clr: #2c2c31;
+
+    /*Accent Colors*/
+
+    --accent1-clr: #ff9898;
+    --accent2-clr: #6b4ace;
+
+    --accent1-clr-t: #ff989843;
+    --accent2-clr-t: #7f54ff4e;
+
+    /*Button Colors*/
+
+    --green-clr: #249e02;
+    --grey-clr: #cdc8c8;
+    --alert-clr: #FF4A00;
+
+   
+}

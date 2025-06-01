@@ -141,7 +141,9 @@ document.getElementById("title-up").addEventListener('click', () => {
 });
 
 document.getElementById("messages-button").addEventListener('click', () => {
-    window.location.href = '/chats';
+    window.location.href='http://localhost:3000/';
+    //window.location.href = '/chats';
+
     selectButton(event.target);
     hideDropdown(messagesDropdownList);
 });
