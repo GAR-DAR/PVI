@@ -72,6 +72,7 @@
         "rollup": "^4.40.0",
         "rxjs": "^7.8.2",
         "shell-quote": "^1.8.2",
+        "socket.io-client": "^4.8.1",
         "source-map-js": "^1.2.1",
         "string-width": "^4.2.3",
         "strip-ansi": "^6.0.1",

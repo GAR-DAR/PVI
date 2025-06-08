@@ -1,0 +1,621 @@
+
+
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+// Add these debug logs to verify
+console.log("Working directory:", __dirname);
+console.log("MongoDB URI:", process.env.MONGODB_URI);
+console.log("MySQL Host:", process.env.DB_HOST);
+console.log("Frontend URL:", process.env.FRONTEND_URL);
+
+
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const cors = require('cors');
+const mysql = require('mysql2/promise'); 
+
+
+// Initialize Express app here, before using it
+const app = express();
+
+// Now you can define routes
+app.get('/', (req, res) => {
+    res.send('Socket.io server is running. Please access the Laravel application directly.');
+  });
+
+app.get('/health', (req, res) => {
+  res.status(200).send('Socket.io server is running');
+});
+
+const uri = process.env.MONGODB_URI;
+
+if (!uri) {
+    console.error("ERROR: MONGODB_URI environment variable is not set!");
+
+   
+
+    process.exit(1);
+} else {
+    console.log("MONGODB_URI loaded successfully (first 20 chars):", uri.substring(0, 20) + "...");
+}
+
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
+
+let db;
+let usersCollection;
+let chatsCollection;
+let messagesCollection;
+
+
+let mysqlPool;
+
+async function connectMySQL() {
+    console.log("Attempting to connect to MySQL...");
+    try {
+        mysqlPool = mysql.createPool({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
+        const connection = await mysqlPool.getConnection();
+        connection.release();
+        console.log("Successfully connected to MySQL database!");
+    } catch (error) {
+        console.error("MySQL connection FAILED!");
+        console.error("Error details:", error);
+        process.exit(1);
+    }
+}
+
+async function syncStudentsFromMySQLToMongo() {
+    console.log("Starting student synchronization from MySQL to MongoDB...");
+    if (!mysqlPool) {
+        console.error("MySQL pool not initialized. Cannot sync students.");
+        return;
+    }
+
+    try {
+        // Update this query to include avatar_path
+        const [rows] = await mysqlPool.execute('SELECT id, email, first_name, last_name, avatar_path FROM students'); 
+        
+        if (rows.length === 0) {
+            console.log("No students found in MySQL 'students' table to sync.");
+            return;
+        }
+
+        const bulkOperations = rows.map(student => ({
+            updateOne: {
+                filter: { mysqlUserId: student.id.toString() }, 
+                update: {
+                    $set: {
+                        loginName: student.email,
+                        name: student.first_name,
+                        lastname: student.last_name,
+                        // Add avatar path to MongoDB document
+                        avatarPath: student.avatar_path || null,
+                        status: 'offline',
+                        lastActive: new Date()
+                    },
+                    $setOnInsert: {
+                        createdAt: new Date()
+                    }
+                },
+                upsert: true 
+            }
+        }));
+
+        const result = await usersCollection.bulkWrite(bulkOperations);
+        console.log(`Synchronization complete: Inserted ${result.upsertedCount} new students, Updated ${result.modifiedCount} existing students.`);
+
+    } catch (error) {
+        console.error("Error syncing students from MySQL to MongoDB:", error);
+    }
+}
+
+
+async function connectDB() {
+    console.log("Attempting to connect to MongoDB...");
+    try {
+        await client.connect();
+        await client.db("admin").command({ ping: 1 });
+        console.log("Pinged your deployment. Successfully connected to MongoDB!");
+
+        db = client.db("pvi_chat_db"); 
+        console.log(`Connected to database: ${db.databaseName}`);
+
+
+        usersCollection = db.collection('users');
+        chatsCollection = db.collection('chats');
+        messagesCollection = db.collection('messages');
+
+        return db;
+
+    } catch (error) {
+        console.error("MongoDB connection FAILED!");
+        console.error("Error details:", error);
+        process.exit(1);
+    }
+}
+
+async function startApplication() {
+    try {
+        await connectDB(); 
+        await connectMySQL(); 
+        await syncStudentsFromMySQLToMongo(); 
+
+       
+        const server = http.createServer(app);
+
+        const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8000';
+        const ALLOWED_ORIGINS = [
+            FRONTEND_URL,
+            'http://keepup-network.test', // Add your Laravel domain here
+            'http://localhost:8000'
+        ];
+        console.log("Allowed origins for CORS:", ALLOWED_ORIGINS);
+
+
+        app.use(cors({
+            origin: function(origin, callback) {
+                // Allow requests with no origin (like mobile apps, curl, etc.)
+                if (!origin) return callback(null, true);
+                
+                if (ALLOWED_ORIGINS.indexOf(origin) !== -1) {
+                    callback(null, true);
+                } else {
+                    console.warn(`Origin ${origin} not allowed by CORS policy. Allowed origins:`, ALLOWED_ORIGINS);
+                    callback(new Error('Not allowed by CORS'));
+                }
+            },
+            methods: ['GET', 'POST'],
+            credentials: true
+        }));
+
+        const io = new socketIo.Server(server, {
+            cors: {
+                origin: ALLOWED_ORIGINS,
+                methods: ["GET", "POST"],
+                credentials: true
+            }
+        });
+
+
+        io.on('connection', async (socket) => {
+            console.log('A user connected:', socket.id);
+
+            let currentUserId = null;
+            let currentUserLoginName = null;
+
+
+            socket.on('requestAllUsers', async () => {
+                try {
+                    console.log(`[Server] requestAllUsers called by user: ${currentUserId || 'unknown'}`);
+                    
+                    // Make sure we're including avatar path
+                    const allUsersData = await usersCollection.find({}, { 
+                        projection: { 
+                            mysqlUserId: 1, 
+                            loginName: 1, 
+                            name: 1, 
+                            lastname: 1, 
+                            status: 1,
+                            avatarPath: 1 // Include avatar path
+                        } 
+                    }).toArray();
+            
+                    console.log(`[Server] Found ${allUsersData.length} users to send to client`);
+                    
+                    if (allUsersData.length > 0) {
+                        console.log(`[Server] Sample user data: ${JSON.stringify(allUsersData[0])}`);
+                    }
+            
+                    socket.emit('allUsersList', allUsersData);
+                    console.log(`[Server] Sent ${allUsersData.length} users to client for allUsersList.`);
+                } catch (error) {
+                    console.error('Error sending all users list on request:', error);
+                    socket.emit('chatError', 'Failed to fetch user list. Please try again.');
+                }
+            });
+
+
+            socket.on('userConnected', async (userData) => {
+                if (!userData || !userData.mysqlUserId || !userData.loginName) {
+                    console.warn('Received userConnected without required data:', userData);
+                    socket.emit('chatError', 'Missing user identification data');
+                    return;
+                }
+            
+                console.log(`[Server] User connected with data:`, userData);
+                currentUserId = userData.mysqlUserId;
+                currentUserLoginName = userData.loginName;
+            
+                try {
+                    // Get the user's avatar path from MySQL
+                    const [rows] = await mysqlPool.execute('SELECT avatar_path FROM students WHERE id = ?', [currentUserId]);
+                    const avatarPath = rows.length > 0 ? rows[0].avatar_path : null;
+            
+                    await usersCollection.updateOne(
+                        { mysqlUserId: currentUserId },
+                        {
+                            $set: {
+                                socketId: socket.id,
+                                loginName: currentUserLoginName,
+                                name: userData.name || 'Unknown',
+                                lastname: userData.lastname || 'User',
+                                avatarPath: avatarPath,  // Add the avatar path
+                                status: 'online',
+                                lastActive: new Date()
+                            },
+                        },
+                        { upsert: true }
+                    );
+                    console.log(`User ${currentUserLoginName} (ID: ${currentUserId}) connected with socket ${socket.id}`);
+            
+                    socket.join(`user-${currentUserId}`);
+                    io.emit('userStatusUpdate', { 
+                        mysqlUserId: currentUserId, 
+                        status: 'online',
+                        avatarPath: avatarPath
+                    });
+            
+                    // Include avatarPath in allUsers projections
+                    const allUsersData = await usersCollection.find({}, { 
+                        projection: { 
+                            mysqlUserId: 1, 
+                            loginName: 1, 
+                            name: 1, 
+                            lastname: 1, 
+                            status: 1,
+                            avatarPath: 1  // Include avatar path
+                        } 
+                    }).toArray();
+                    socket.emit('allUsersList', allUsersData);
+                } catch (error) {
+                    console.error('Error in userConnected handler:', error);
+                    socket.emit('chatError', 'Failed to register user connection');
+                }
+            });
+
+            socket.on('createChat', async (data) => {
+                let chatName = data.name; 
+            let otherParticipantMySqlId = null; 
+            const uniqueParticipants = [...new Set([...data.participants, currentUserId])];
+            if (data.type === 'private') {
+                const otherParticipantId = uniqueParticipants.find(p => p !== currentUserId);
+                const otherUser = await usersCollection.findOne({ mysqlUserId: otherParticipantId });
+                const currentUserDoc = await usersCollection.findOne({ mysqlUserId: currentUserId });
+
+                if (otherUser && currentUserDoc) {
+                    chatName = `${currentUserDoc.loginName} & ${otherUser.loginName}`;
+                    otherParticipantMySqlId = otherUser.mysqlUserId;
+                } else {
+                    chatName = `Private Chat (${uniqueParticipants.join(', ')})`;
+                    otherParticipantMySqlId = otherParticipantId; 
+                }
+            }
+
+            const existingChat = await chatsCollection.findOne({
+                type: data.type,
+                participants: { $size: uniqueParticipants.length, $all: uniqueParticipants }
+            });
+            if (existingChat) {
+                socket.emit('chatError', 'Chat already exists.');
+                if (existingChat.type === 'private' && existingChat.participants.length === 2) {
+                    existingChat.otherParticipantMySqlId = existingChat.participants.find(p => p !== currentUserId);
+                }
+                socket.emit('chatCreated', existingChat);
+                return;
+            }
+
+            const newChat = {
+                type: data.type,
+                participants: uniqueParticipants,
+                name: chatName, 
+                otherParticipantMySqlId: otherParticipantMySqlId,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            const result = await chatsCollection.insertOne(newChat);
+            newChat._id = result.insertedId;
+            uniqueParticipants.forEach(participantId => {
+                io.to(`user-${participantId}`).emit('chatCreated', newChat);
+            });
+            console.log(`Chat created: ${newChat._id} with participants: ${uniqueParticipants.join(', ')}`);
+            });
+
+
+socket.on('connect', () => {
+    console.log('Connected to chat server!', socket.id);
+    socket.emit('userConnected', {
+        mysqlUserId: currentUser.mysqlUserId,
+        loginName: currentUser.loginName,
+        name: currentUser.name,
+        lastname: currentUser.lastname
+    });
+    socket.emit('requestChatsList', currentUser.mysqlUserId);
+    socket.emit('requestAllUsers');
+    socket.emit('getUnreadMessages', currentUser.mysqlUserId);
+});
+
+
+            socket.on('joinChat', async (chatId) => {
+    if (!chatId || !currentUserId) { 
+        socket.emit('chatError', 'Invalid chat ID or user not connected.');
+        return;
+    }
+    const chatObjectId = new ObjectId(chatId);
+    const chat = await chatsCollection.findOne({ _id: chatObjectId, participants: currentUserId });
+    if (!chat) {
+        socket.emit('chatError', 'Chat not found or user not a participant.');
+        return;
+    }
+    socket.join(chatId);
+    console.log(`User ${currentUserLoginName} joined chat room: ${chatId}`);
+
+    try {
+        const userIdStr = currentUserId.toString();
+        const result = await messagesCollection.updateMany(
+            { chatId: chatObjectId, readBy: { $nin: [userIdStr] } },
+            { $addToSet: { readBy: userIdStr } }
+        );
+        console.log(`Marked ${result.modifiedCount} messages in chat ${chatId} as read by ${userIdStr}`);
+    } catch (err) {
+        console.error('Error marking messages as read on chat join:', err);
+    }
+
+    const history = await messagesCollection.find({ chatId: chatObjectId })
+                                    .sort({ timestamp: 1 })
+                                    .limit(100)
+                                    .toArray();
+    socket.emit('chatHistory', { chatId: chatId, messages: history });
+
+    io.to(`user-${currentUserId}`).emit('getUnreadMessages', currentUserId);
+});
+
+
+socket.on('sendMessage', async (data) => {
+    if (!currentUserId || !data.chatId || !data.message) {
+        socket.emit('chatError', 'Invalid message data.');
+        return;
+    }
+    const chatObjectId = new ObjectId(data.chatId);
+    const chat = await chatsCollection.findOne({ _id: chatObjectId, participants: currentUserId });
+    if (!chat) {
+        socket.emit('chatError', 'You are not a participant of this chat.');
+        return;
+    }
+
+    const readers = new Set([currentUserId]);
+    const chatRoomSockets = io.sockets.adapter.rooms.get(data.chatId);
+
+    if (chatRoomSockets) {
+        for (const socketId of chatRoomSockets) {
+            const user = await usersCollection.findOne({ socketId: socketId });
+            if (user && user.mysqlUserId) {
+                readers.add(user.mysqlUserId);
+            }
+        }
+    }
+
+    const newMessage = {
+        chatId: chatObjectId,
+        senderId: currentUserId,
+        message: data.message,
+        timestamp: new Date(),
+        readBy: Array.from(readers) 
+    };
+    const result = await messagesCollection.insertOne(newMessage);
+    newMessage._id = result.insertedId;
+    await chatsCollection.updateOne(
+        { _id: chatObjectId },
+        { $set: { updatedAt: new Date(), lastMessageSnippet: data.message.substring(0, 50) } }
+    );
+    io.to(data.chatId).emit('newMessage', newMessage);
+
+
+    chat.participants.forEach(async participantId => {
+
+        if (!readers.has(participantId)) {
+            io.to(`user-${participantId}`).emit('getUnreadMessages', participantId);
+        }
+
+        if (participantId !== currentUserId) {
+            const participantUser = await usersCollection.findOne({ mysqlUserId: participantId });
+            if (participantUser && participantUser.socketId && io.sockets.sockets.has(participantUser.socketId)) {
+                if (!chatRoomSockets?.has(participantUser.socketId)) {
+                    io.to(`user-${participantId}`).emit('newNotification', {
+                        chatId: data.chatId,
+                        sender: currentUserLoginName,
+                        snippet: data.message.substring(0, 50) + '...',
+                        type: 'message'
+                    });
+                }
+            }
+        }
+    });
+    console.log(`Message sent in chat ${data.chatId} by ${currentUserLoginName}: ${data.message}`);
+});
+
+
+
+
+socket.on('getUnreadMessages', async (userId) => {
+    console.log(`[Server] getUnreadMessages called by userId: ${userId}`);
+    try {
+        const userIdStr = userId.toString();
+
+        const userChats = await chatsCollection.find({ participants: userIdStr }).project({ _id: 1 }).toArray();
+        const chatIds = userChats.map(c => c._id);
+
+        const unreadMessages = await messagesCollection.find({
+            chatId: { $in: chatIds },
+            readBy: { $nin: [userIdStr] }
+        }).sort({ timestamp: -1 }).limit(3).toArray();
+
+        console.log(`[Server] Emitting unreadMessages to user ${userIdStr}`, unreadMessages);
+        socket.emit('unreadMessages', unreadMessages);
+    } catch (error) {
+        console.error('Error getting unread messages:', error);
+    }
+});
+
+
+socket.on('addParticipantsToChat', async ({ chatId, newParticipantIds }) => {
+    if (!currentUserId || !chatId || !Array.isArray(newParticipantIds) || newParticipantIds.length === 0) {
+        socket.emit('chatError', 'Invalid request to add participants.');
+        return;
+    }
+
+    try {
+        const chatObjectId = new ObjectId(chatId);
+        const chat = await chatsCollection.findOne({ _id: chatObjectId });
+
+        if (!chat) {
+            socket.emit('chatError', 'Chat not found.');
+            return;
+        }
+
+        if (!chat.participants.includes(currentUserId)) {
+            socket.emit('chatError', 'You are not a participant of this chat.');
+            return;
+        }
+
+        const validNewParticipants = [];
+        for (const newPId of newParticipantIds) {
+            const userExists = await usersCollection.countDocuments({ mysqlUserId: newPId });
+            if (userExists && !chat.participants.includes(newPId)) {
+                validNewParticipants.push(newPId);
+            } else if (chat.participants.includes(newPId)) {
+                console.warn(`Attempted to add participant ${newPId} who is already in chat ${chatId}`);
+            } else {
+                console.warn(`Attempted to add non-existent user ID: ${newPId}`);
+            }
+        }
+
+        if (validNewParticipants.length === 0) {
+            socket.emit('chatError', 'No valid new participants to add, or they are already in the chat.');
+            return;
+        }
+
+        const result = await chatsCollection.updateOne(
+            { _id: chatObjectId },
+            { $addToSet: { participants: { $each: validNewParticipants } } }
+        );
+
+       if (result.modifiedCount > 0) {
+            console.log(`Added participants ${validNewParticipants.join(', ')} to chat ${chatId}`);
+
+            const updatedChat = await chatsCollection.findOne({ _id: chatObjectId });
+
+            validNewParticipants.forEach(pId => {
+                io.to(`user-${pId}`).emit('participantsAdded', { chatId: updatedChat._id, newParticipants: validNewParticipants });
+            });
+
+            updatedChat.participants.forEach(pId => {
+                io.to(`user-${pId}`).emit('refreshMyChatsList');
+            });
+
+        } else {
+            socket.emit('chatError', 'Failed to add participants (no change detected or already added).');
+        }
+
+    } catch (error) {
+        console.error('Error adding participants to chat:', error);
+        socket.emit('chatError', 'Server error adding participants.');
+    }
+});
+
+
+socket.on('requestChatsList', async (userId) => {
+    try {
+        const userChats = await chatsCollection.find({ participants: userId }).toArray();
+        const chatsWithDetails = [];
+
+        for (const chat of userChats) {
+            const chatForClient = { ...chat }; 
+
+            if (chat.type === 'private') {
+                const otherParticipantId = chat.participants.find(p => p !== userId);
+                if (otherParticipantId) {
+                    chatForClient.otherParticipantMySqlId = otherParticipantId;
+
+                    const otherUser = await usersCollection.findOne({ mysqlUserId: otherParticipantId });
+                    if (otherUser) {
+                        chatForClient.name = `${otherUser.name} ${otherUser.lastname}`;
+                        chatForClient.otherParticipantStatus = otherUser.status; 
+                    } else {
+                         chatForClient.name = `Unknown User (${otherParticipantId})`;
+                    }
+                }
+            }
+            chatsWithDetails.push(chatForClient);
+        }
+
+        socket.emit('chatsList', chatsWithDetails);
+        console.log(`[Server] Sent chats list to user ${userId}.`);
+    } catch (error) {
+        console.error('Error fetching chats list:', error);
+    }
+});
+
+socket.on('markMessagesAsRead', async ({ chatId, userId }) => {
+    try {
+        const userIdStr = userId.toString();
+        const chatObjectId = new ObjectId(chatId);
+        const result = await messagesCollection.updateMany(
+            { chatId: chatObjectId, readBy: { $nin: [userIdStr] } },
+            { $addToSet: { readBy: userIdStr } }
+        );
+        console.log(`Marked ${result.modifiedCount} messages as read by ${userIdStr} in chat ${chatId}`);
+
+        io.to(`user-${userIdStr}`).emit('getUnreadMessages', userIdStr);
+
+    } catch (err) {
+        console.error('Error marking messages as read:', err);
+    }
+});
+
+
+            socket.on('disconnect', async () => {
+                if (currentUserId) {
+                    console.log(`User ${currentUserLoginName} (ID: ${currentUserId}) disconnected from socket ${socket.id}`);
+                    await usersCollection.updateOne(
+                        { mysqlUserId: currentUserId },
+                        { $set: { status: 'offline', socketId: null, lastActive: new Date() } }
+                    );
+                    io.emit('userStatusUpdate', { mysqlUserId: currentUserId, status: 'offline' });
+                } else {
+                    console.log('An unauthenticated user disconnected:', socket.id);
+                }
+            });
+
+            socket.on('error', (err) => {
+                console.error('Socket error:', err);
+            });
+        });
+
+        const PORT = process.env.PORT || 3000;
+        server.listen(PORT, () => {
+            console.log(`Node.js Chat Server listening on port ${PORT}`);
+        });
+
+    } catch (error) {
+        console.error("Failed to start application services:", error);
+        process.exit(1);
+    }
+}
+
+startApplication();

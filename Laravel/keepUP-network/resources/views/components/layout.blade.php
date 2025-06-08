@@ -6,12 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>keepUP</title>
 
+<script>
+    window.chatConfig = {
+        csrfToken: "{{ csrf_token() }}"
+        , loginName: "{{ Auth::check() ? Auth::user()->email : '' }}"
+        , studentId: "{{ Auth::check() ? Auth::user()->id : '' }}"
+        , studentName: "{{ Auth::check() ? Auth::user()->first_name ?? '' : '' }}"
+        , studentLastname: "{{ Auth::check() ? Auth::user()->last_name ?? '' : '' }}"
+        , avatarPath: "{{ Auth::check() && Auth::user()->avatar_path ? asset(Auth::user()->avatar_path) : asset('images/user-sample.png') }}"
+    };
+
+</script>
+
     @vite('resources/css/app.css')
+    @vite('nodejs-server/app.js')
 </head>
 
 
 <body>
     <header>
+
         <div id="user-panel" class="user-panel">
             <div class="user-panel-title">
                 <h3 id="title-up" style="margin-left: 10px; cursor: pointer;">KeepUP</h3>
@@ -20,70 +34,30 @@
              <div class="user-panel-buttons">
                  @auth
                  <div class="dropdown" id="messages_dropdown">
-                     <button id="messages-button" class="ico-button"">
-
-
+                     <button id="messages-button" class="ico-button">
                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
                              <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z" />
                          </svg>
+                         <div id="notification-circle" class="notification-circle"></div>
                      </button>
 
                      <div class="dropdown-list" id="messages-list">
-                         <div class="message-item">
-                             <div class="avatar-container">
-                                 <img src="{{ asset('images/user-sample.png') }}" alt="User Icon" class="avatar">
-
-                                 <div class="status-indicator online"></div>
-                             </div>
-                             <div class="message-div">
-                                 <div class="author-name">Iryna Hrabovenska</div>
-                                 <div class="message-row">
-                                     <div class="message-text">Can't hide it, I love your new design!</div>
-                                     <div class="message-time">13:30</div>
-                                 </div>
-                             </div>
+                         <div class="dropdown-messages-container">
+                             <!-- Messages will be populated here dynamically -->
+                             <div class="no-messages">No unread messages</div>
                          </div>
-
-                         <div class="message-item">
-                             <div class="avatar-container">
-                                 <img src="{{ asset('images/user-sample.png') }}" alt="User Icon" class="avatar">
-
-                                 <div class="status-indicator offline"></div>
-                             </div>
-                             <div class="message-div unread">
-                                 <div class="author-name">Marichka Lytvin</div>
-                                 <div class="message-row">
-                                     <div class="message-text">What's up?</div>
-                                     <div class="message-time">12:15</div>
-                                 </div>
-                             </div>
+                         <div class="dropdown-footer">
+                             <a href="{{ url('/chats') }}" class="view-all-messages">View All Messages</a>
+                             <button id="markAllReadBtn" class="mark-all-read-button">Mark All as Read</button>
                          </div>
-
-                         <div class="message-item">
-                             <div class="avatar-container">
-                                 <img src="{{ asset('images/user-sample.png') }}" alt="User Icon" class="avatar">
-
-                                 <div class="status-indicator online"></div>
-                             </div>
-                             <div class="message-div">
-                                 <div class="author-name">Marta Zastrizhna</div>
-                                 <div class="message-row">
-                                     <div class="message-text">He know everything, RUN!</div>
-                                     <div class="message-time">10:45</div>
-                                 </div>
-                             </div>
-                         </div>
-
-
                      </div>
-
                  </div>
 
-                @php
-                    $student = \App\Models\Students::where('email', Auth::user()->email)->first();
-                    $fullName = $student ? $student->first_name . ' ' . $student->last_name : Auth::user()->name;
-                    $avatarPath = $student && $student->avatar_path ? asset($student->avatar_path) : asset('images/user-sample.png');
-                @endphp
+                 @php
+                 $student = \App\Models\Students::where('email', Auth::user()->email)->first();
+                 $fullName = $student ? $student->first_name . ' ' . $student->last_name : Auth::user()->name;
+                 $avatarPath = $student && $student->avatar_path ? asset($student->avatar_path) : asset('images/user-sample.png');
+                 @endphp
 
 
                  <p class="user-panel-title">{{ $fullName }}</p>
@@ -99,6 +73,7 @@
                          </div>
                          @endif
                      </button>
+
 
 
 
@@ -182,7 +157,14 @@
         </ul>
     </nav>
 
+   
+
+
     <main class="main-content">
+
+       <!-- <x-header :login-name="$loginName"></x-header> -->
+
+
         {{ $slot }}
     </main>
 
@@ -194,7 +176,7 @@
         </div>
     </footer>
 
-    <div class="decorative-bottom"></div>
+    <!--<div class="decorative-bottom"></div>-->
 
      <script>
 
@@ -268,6 +250,8 @@
      </script>
 
 
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
 
     @vite([
 
@@ -275,8 +259,10 @@
     'resources/js/students/students.js',
     'resources/js/students/validation.js',
     'resources/js/notifications.js',
+    'resources/js/chats.js',
     
     ])
+
 
 
 </body>

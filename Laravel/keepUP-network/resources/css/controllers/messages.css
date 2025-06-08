@@ -56,3 +56,55 @@
         rotate: 23deg;
         background-color: var(--light-hover-clr);
 }*/
+
+
+.notification-circle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: var(--accent1-clr, #ff6b6b);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ico-button {
+    position: relative;
+}
+
+.notify-animation {
+    animation: pulse 1s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.2);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    75% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Dropdown styling */
+.dropdown-list {
+    display: none;
+}
+
+.dropdown-list.show {
+    display: block;
+}

@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 /* Root styles */
 @import './root/sidebar.css';
@@ -25,3 +23,4 @@
 @import './modals/delete-student-modal.css';
 
 @import './profile.css';
+@import './chat.css';

@@ -2,15 +2,31 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+
 
 use App\Models\Students;
 use App\Models\Gender;
 use App\Models\Status;
 use App\Models\Role;
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
+})->name('home');*/
+
+
+Route::get('/', function () {
+    $loginName = Session::get('login_name');
+    $csrfToken = csrf_token();
+    $studentId = Session::get('student_id');
+    $studentName = Session::get('student_name');
+    $studentLastname = Session::get('student_lastname');
+    $avatarPath = Session::get('avatar_path');
+
+    return view('welcome', compact('loginName', 'csrfToken', 'studentId', 'studentName', 'studentLastname', 'avatarPath'));
 })->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -22,6 +38,21 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    // Add a view composer for all views to have user data
+    view()->composer('*', function ($view) {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $view->with([
+                'loginName' => $user->email,
+                'csrfToken' => csrf_token(),
+                'studentId' => $user->id,
+                'studentName' => $user->first_name,
+                'studentLastname' => $user->last_name,
+                'avatarPath' => $user->avatar_path
+            ]);
+        }
+    });
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', function () {
@@ -37,6 +68,7 @@ Route::middleware('auth')->group(function () {
         return view('profile', ['student' => $studentData]);
     })->name('profile.show');
 
+    // Students routes
     Route::get('/students', [StudentsController::class, 'index'])->name('students.index');
     Route::get('/students/create', [StudentsController::class, 'create'])->name('students.create');
     Route::post('/students', [StudentsController::class, 'store'])->name('students.store');
@@ -45,13 +77,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/students/{student}/confirm-delete', [StudentsController::class, 'confirmDelete'])->name('students.confirm-delete');
     Route::delete('/students/{student}', [StudentsController::class, 'destroy'])->name('students.destroy');
 
+    // Tasks route
     Route::get('/tasks', function () {
         return view('tasks');
     });
 
+    // Chats route
     Route::get('/chats', function () {
         return view('chats');
-    });
+    })->name('chats');
 });
 
 

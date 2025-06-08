@@ -21,191 +21,11 @@
     <link rel="stylesheet" href="css/controllers/checkbox.css">
     <link rel="stylesheet" href="css/controllers/calendar/calendar.css">
 
-    <style>
-        
-        .chat-container {
-            /* Wrapper for all chat UI parts */
-            background-color: var(--el-base-clr, #fff);
-            /* Use your theme color or default */
-            color: var(--text-clr, #333);
-            padding: 20px;
-            border-radius: var(--el-border-radius, 8px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            /* Centered with some margin */
-            max-width: 700px;
-            /* Or your preferred max width */
-        }
-
-        #auth-setup,
-        #room-setup,
-        #chat-area-content {
-            padding: 15px;
-            /* border-bottom: 1px solid var(--border-clr, #eee); */
-            /* Use your theme border color */
-        }
-
-        #auth-setup h3,
-        #room-setup h3,
-        #chat-header {
-            color: var(--title-clr, #333);
-            margin-bottom: 15px;
-        }
-
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 10px;
-            height: 450px;
-            /* Adjust as needed */
-            overflow-y: auto;
-            background-color: var(--el-alt-base-clr, #f9f9f9);
-            /* Slightly different background for messages list */
-            border: 1px solid var(--border-clr, #eee);
-            border-radius: var(--el-border-radius-s, 4px);
-            margin-bottom: 10px;
-        }
-
-        /* Styling for individual chat messages - to be refined in your messages.css */
-        .chat-message-item {
-            display: flex;
-            padding: 10px 5px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--border-clr-light, #efefef);
-        }
-
-        .chat-message-item:last-child {
-            border-bottom: none;
-        }
-
-        .chat-message-item.system-message .chat-message-body {
-            font-style: italic;
-            color: var(--text-clr-secondary, #666);
-            text-align: center;
-            width: 100%;
-        }
-
-        .chat-avatar-container img.avatar {
-            /* Class from your layout */
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .chat-message-body {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .chat-author-name {
-            font-weight: bold;
-            color: var(--accent1-clr, #007bff);
-            /* Use an accent color */
-            margin-bottom: 3px;
-        }
-
-        .chat-message-text-content {
-            word-break: break-word;
-            line-height: 1.5;
-        }
-
-        .chat-message-media img,
-        .chat-message-media video {
-            max-width: 100%;
-            /* Responsive within message */
-            height: auto;
-            max-height: 250px;
-            border-radius: var(--el-border-radius-s, 4px);
-            margin-top: 5px;
-            cursor: pointer;
-            border: 1px solid var(--border-clr, #eee);
-        }
-
-        .chat-file-info {
-            font-size: 0.8em;
-            color: var(--text-clr-secondary, #777);
-            margin-top: 4px;
-        }
-
-        .chat-timestamp {
-            font-size: 0.75em;
-            color: var(--text-clr-secondary, #999);
-            margin-top: 5px;
-            align-self: flex-start;
-            /* Keep timestamp with text */
-        }
-
-        #form-chat {
-            /* Renamed chat form */
-            display: flex;
-            padding: 10px 0;
-            /* Remove padding if parent has it */
-            /* background: var(--el-base-clr, #f0f0f0); */
-            /* Use theme color */
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        #input-message {
-            /* Renamed chat input */
-            /* Inherit from your global input styles if possible */
-            flex-grow: 1;
-            margin-right: 10px;
-        }
-
-        #file-input-label {
-            margin-right: 10px;
-            /* Already styled by buttons.css presumably */
-        }
-
-       
+    <link rel="stylesheet" href="chat.css">
 
 
-        .error-message {
-            color: var(--error-clr, red);
-            font-size: 0.9em;
-            margin-top: 8px;
-        }
+   
 
-        #file-preview {
-            font-size: 0.85em;
-            color: var(--text-clr-secondary, #555);
-            margin-top: 5px;
-            padding-left: 5px;
-        }
-
-        /* Bell animation class */
-        #messages-button.double-clicked svg {
-            animation: bellRing 0.5s ease-in-out;
-        }
-
-        @keyframes bellRing {
-
-            /* Ensure you have this or similar in your CSS if not already present */
-            0% {
-                transform: rotate(0deg);
-            }
-
-            25% {
-                transform: rotate(15deg);
-            }
-
-            50% {
-                transform: rotate(-15deg);
-            }
-
-            75% {
-                transform: rotate(10deg);
-            }
-
-            100% {
-                transform: rotate(0deg);
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -306,40 +126,121 @@
     </nav>
 
     <main class="main-content">
-        <div class="chat-container"> <!-- Chat specific container -->
+        <div class="chat-container">
+            <!-- Auth & Room setup divs stay the same -->
             <div id="auth-setup">
                 <h3>Login to Chat</h3>
                 <input id="email-input" type="email" placeholder="your.email@example.com" class="form-input" />
-                <!-- Add common input class -->
-                <button id="login-btn" class="btn">Login</button> <!-- Add common button class -->
+                <button id="login-btn" class="btn">Login</button>
                 <p id="auth-error" class="error-message"></p>
             </div>
-
+    
             <div id="room-setup" style="display:none;">
                 <p id="user-info-chat">Welcome, <strong id="display-chat-username"></strong>!</p>
                 <h3>Join or Create a Chat Room</h3>
-                <input id="room-input" type="text" placeholder="e.g., 'general' or 'project-alpha'"
-                    class="form-input" />
+                <input id="room-input" type="text" placeholder="e.g., 'general' or 'project-alpha'" class="form-input" />
                 <button id="join-room-btn" class="btn">Join Room</button>
                 <p id="room-error" class="error-message"></p>
             </div>
+    
+            <!-- NEW: Chat layout with My Chats and chat area -->
+            <div id="chat-area-content" style="display:none;">
+                <div class="chat-layout">
+                    <!-- My Chats panel on the left -->
+                    <div class="users-panel">
 
-            <div id="chat-area-content" style="display:none;"> <!-- Renamed ID -->
-                <div id="chat-header">Room: <span id="current-room-name"></span></div>
-                <ul id="messages"></ul>
-                <form id="form-chat" action="">
-                    <label id="file-input-label" for="file-input" class="btn btn-secondary">📎 File</label>
-                    <!-- Style as button -->
-                    <input type="file" id="file-input" accept="image/*,video/*" />
-                    <input id="input-message" autocomplete="off" placeholder="Type a message or select a file..."
-                        class="form-input" />
-                    <button id="send-btn" class="btn btn-primary">Send</button> <!-- Style as primary button -->
-                </form>
-                <p id="file-preview"></p>
-                <p id="chat-error" class="error-message"></p>
+                        <div class="users-header">
+                           
+                            <button  id="new-chat-btn">+</button>
+                            <h3>My Chatss</h3>
+                       </div>
+    
+                        <!-- Search box for filtering chats -->
+                        <div class="chat-search">
+                            <input type="text" placeholder="Search chats..." />
+                        </div>
+    
+                        <!-- List of chats that include the current user with unread counts -->
+                        <ul id="users-list" class="chats-list">
+                            <!-- Chat items will be populated here by JavaScript -->
+                        </ul>
+    
+                        <!-- Current user info at the bottom -->
+                        <div class="current-user-info">
+                            <div class="current-user-avatar">GD</div>
+                            <div class="current-user-name">GAR-DAR</div>
+                        </div>
+                    </div>
+    
+                    <!-- Chat content on the right -->
+                    <div class="chat-panel">
+                        <div id="chat-header">Room: <span id="current-room-name"></span></div>
+                        <ul id="messages"></ul>
+                        <form id="form-chat" action="">
+                            <label id="file-input-label" for="file-input" class="btn btn-secondary">📎 File</label>
+                            <input type="file" id="file-input" accept="image/*,video/*" />
+                            <input id="input-message" autocomplete="off" placeholder="Type a message or select a file..."
+                                class="form-input" />
+                            <button id="send-btn" class="btn btn-primary">Send</button>
+                        </form>
+                        <p id="file-preview"></p>
+                        <p id="chat-error" class="error-message"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+
+    <div class="popup-overlay" id="new-chat-popup">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h3>Create New Chat</h3>
+                <button class="popup-close" id="popup-close">&times;</button>
+            </div>
+            <div class="popup-body">
+                <div class="chat-name-input">
+                    <label for="chat-name">Chat Name</label>
+                    <input type="text" id="chat-name" placeholder="Enter a name for this chat" autocomplete="off">
+                </div>
+    
+                <div class="user-search">
+                    <label for="user-search-input">Search Users</label>
+                    <input type="text" id="user-search-input" placeholder="Search by name or email" autocomplete="off">
+                </div>
+    
+                <div class="user-list">
+                    <div class="user-list-header">
+                        <span>Select Users</span>
+                        <div class="select-all-container">
+                            <input type="checkbox" id="select-all-users">
+                            <label for="select-all-users">Select All</label>
+                        </div>
+                    </div>
+                    <div id="user-list-container">
+                        <!-- User items will be populated here -->
+                        <div class="user-item loading">
+                            <span class="loading-spinner"></span>
+                            <span>Loading users...</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <p class="error-message" id="popup-error"></p>
+            </div>
+            <div class="popup-footer">
+                <div class="selected-count" id="selected-count">0 users selected</div>
+                <div>
+                    <button class="popup-btn popup-btn-cancel" id="popup-cancel">Cancel</button>
+                    <button class="popup-btn popup-btn-create" id="popup-create" disabled>Create Chat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add New Chat Button (to the users panel) -->
+    
+
+
 
     <footer>
         <div id="footer" class="footer">
@@ -347,486 +248,9 @@
                 happen.</p>
         </div>
     </footer>
-    <div class="decorative-bottom"></div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        // --- Service Worker Registration ---
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker
-                    .register("./sw.js") // Ensure sw.js is in the correct path relative to your app's root
-                    .then(registration => {
-                        console.log("Service Worker registered with scope:", registration.scope);
-                    })
-                    .catch(err => {
-                        console.error("Service Worker registration failed:", err);
-                    });
-            });
-        }
-
-        // --- Chat & Layout Combined Client-Side JavaScript ---
-        const socket = io();
-
-        // Layout UI Elements (from your script)
-        const toggleButton = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const avatarDropdownContainer = document.getElementById('avatar_dropdown');
-        const avatarDropdownList = document.getElementById('avatar-dropdown-content'); // Corrected ID
-        const messagesDropdownContainer = document.getElementById('messages_dropdown');
-        const messagesDropdownList = document.getElementById('messages-list-dropdown-content'); // Corrected ID
-        const messagesButton = document.getElementById('messages-button'); // Bell icon
-
-        // Chat UI Elements
-        const authSetupDiv = document.getElementById('auth-setup');
-        const emailInput = document.getElementById('email-input');
-        const loginBtn = document.getElementById('login-btn');
-        const authErrorP = document.getElementById('auth-error');
-
-        const roomSetupDiv = document.getElementById('room-setup');
-        const displayChatUsernameSpan = document.getElementById('display-chat-username');
-        const roomInput = document.getElementById('room-input');
-        const joinRoomBtn = document.getElementById('join-room-btn');
-        const roomErrorP = document.getElementById('room-error');
-
-        const chatAreaContent = document.getElementById('chat-area-content');
-        const currentRoomNameSpan = document.getElementById('current-room-name');
-        const messagesUl = document.getElementById('messages');
-        const messageForm = document.getElementById('form-chat');
-        const messageInput = document.getElementById('input-message');
-        const fileInput = document.getElementById('file-input');
-        const filePreviewP = document.getElementById('file-preview');
-        // const sendBtn = document.getElementById('send-btn'); // Already part of form submission
-
-        const chatErrorP = document.getElementById('chat-error');
-
-        // Header elements to update
-        const chatUserHeaderControls = document.getElementById('chat-user-header-controls');
-        const headerAuthButtons = document.getElementById('header-auth-buttons');
-        const headerUsernameDisplay = document.getElementById('header-username-display');
-        const headerAvatarDisplay = document.getElementById('header-avatar-display');
-        const chatLogoutButton = document.getElementById('chat-logout-button');
-
-
-        let currentGlobalUsername = null;
-        let currentUserGlobalAvatar = null;
-        let currentGlobalRoom = null;
-        let selectedFile = null;
-
-        // --- Helper Functions ---
-        function clearAllErrors() {
-            if (authErrorP) authErrorP.textContent = '';
-            if (roomErrorP) roomErrorP.textContent = '';
-            if (chatErrorP) chatErrorP.textContent = '';
-        }
-
-        // --- Sidebar functions (from your script) ---
-        function selectButtonInSidebar(buttonElement) { // Renamed to avoid conflict if 'selectButton' is global
-            if (!sidebar) return;
-            const listItems = sidebar.querySelectorAll('ul li');
-            listItems.forEach(li => li.classList.remove('active'));
-            const parentLi = buttonElement.closest('li');
-            if (parentLi) {
-                parentLi.classList.add('active');
-            }
-        }
-
-        function toggleSidebarState() { // Renamed
-            if (sidebar && toggleButton) {
-                sidebar.classList.toggle('close');
-                toggleButton.classList.toggle('rotate'); // Assuming 'rotate' class handles icon animation
-                const isClosed = sidebar.classList.contains('close');
-                toggleButton.setAttribute('aria-expanded', !isClosed);
-            }
-        }
-        if (toggleButton) {
-            toggleButton.addEventListener('click', toggleSidebarState);
-        }
-
-        // --- Unread messages animation (from your script) ---
-        function unreadedMessagesAnimation() {
-            if (!messagesButton) return;
-            const svg = messagesButton.querySelector('svg');
-            if (!svg) return;
-
-            // const originalSVGContent = svg.innerHTML; // Storing and restoring complex SVG can be tricky, class-based animation is better
-            messagesButton.classList.add('double-clicked'); // CSS should handle the animation
-
-            messagesButton.addEventListener('animationend', function () {
-                messagesButton.classList.remove('double-clicked');
-                // svg.innerHTML = originalSVGContent; // Might not be needed if CSS resets animation
-            }, { once: true });
-        }
-
-        // --- Dropdown menu (from your script, adapted for robustness) ---
-        function setupDropdown(container, list) {
-            if (!container || !list) return;
-
-            const show = () => {
-                list.classList.remove('close-dropdown'); // Ensure closing animation class is removed
-                list.style.display = 'block'; // Use display block/none
-                // list.classList.add('show-dropdown'); // Use if you have CSS animation for show
-            };
-            const hide = () => {
-                // if (list.classList.contains('show-dropdown')) {
-                //    list.classList.remove('show-dropdown');
-                //    list.classList.add('close-dropdown');
-                //    list.addEventListener('animationend', () => { // Prefer animationend over transitionend for complex anims
-                //        list.classList.remove('close-dropdown');
-                //        list.style.display = 'none';
-                //    }, { once: true });
-                // } else {
-                list.style.display = 'none'; // Fallback if no animation
-                // }
-            };
-
-            container.addEventListener('mouseenter', () => {
-                show();
-                // Hide other dropdown if it exists and is different
-                if (container === avatarDropdownContainer && messagesDropdownList) hideDropdownList(messagesDropdownList);
-                if (container === messagesDropdownContainer && avatarDropdownList) hideDropdownList(avatarDropdownList);
-            });
-            container.addEventListener('mouseleave', () => { // Hide on mouse leave from container
-                hide();
-            });
-        }
-
-        // Helper to hide a specific dropdown list
-        function hideDropdownList(dropdownListElement) {
-            if (dropdownListElement) {
-                dropdownListElement.style.display = 'none';
-                // Add animation classes if you have them:
-                // dropdownListElement.classList.remove('show-dropdown');
-                // dropdownListElement.classList.add('close-dropdown');
-                // ... handle animation end to set display none
-            }
-        }
-
-        if (avatarDropdownContainer && avatarDropdownList) setupDropdown(avatarDropdownContainer, avatarDropdownList);
-        if (messagesDropdownContainer && messagesDropdownList) setupDropdown(messagesDropdownContainer, messagesDropdownList);
-
-        // Global click to hide dropdowns (from your script)
-        document.addEventListener('click', (event) => {
-            const isAvatarClick = avatarDropdownContainer && avatarDropdownContainer.contains(event.target);
-            const isMessagesClick = messagesDropdownContainer && messagesDropdownContainer.contains(event.target);
-
-            if (!isAvatarClick && avatarDropdownList) hideDropdownList(avatarDropdownList);
-            if (!isMessagesClick && messagesDropdownList) hideDropdownList(messagesDropdownList);
-        });
-
-
-        // --- Page navigation event listeners (from your script) ---
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', function (event) {
-                selectButtonInSidebar(this);
-                const targetPage = this.id.replace('-nav', ''); // e.g. "dashboard", "students"
-                if (targetPage === 'messages') { // Assuming you might add a messages link
-                    window.location.href = 'http://localhost:3000/'; // Navigate to chat
-                } else if (targetPage) {
-                    // For a real SPA, you'd load content. For now, it navigates.
-                    // window.location.href = `/${targetPage}`;
-                    console.log(`Navigate to /${targetPage} (not implemented in standalone chat)`);
-                }
-            });
-        });
-        if (document.getElementById("title-up")) {
-            document.getElementById("title-up").addEventListener('click', (event) => {
-                window.location.href = '/'; // Or your main dashboard
-                // If dashboard is a sidebar item, select it:
-                // const dashboardNav = document.getElementById('dashboard-nav');
-                // if(dashboardNav) selectButtonInSidebar(dashboardNav);
-            });
-        }
-        if (messagesButton) { // Bell icon
-            messagesButton.addEventListener('click', (event) => {
-                window.location.href = 'http://localhost:3000/'; // Reload chat page or navigate to it
-                // const messagesNav = document.getElementById('messages-nav'); // If you add a messages-nav to sidebar
-                // if(messagesNav) selectButtonInSidebar(messagesNav);
-                if (messagesDropdownList) hideDropdownList(messagesDropdownList);
-            });
-            messagesButton.addEventListener('dblclick', () => {
-                unreadedMessagesAnimation();
-            });
-        }
-        const profileButtonInDropdown = document.getElementById('header-profile-button'); // The button that opens avatar dropdown
-        const profileLinkInDropdown = document.getElementById('profile-link-header'); // The actual "Profile" link
-
-        if (profileLinkInDropdown) {
-            profileLinkInDropdown.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent default link behavior
-                console.log("Navigate to profile page (not implemented in standalone chat)");
-                // window.location.href = '/profile'; // Actual navigation
-                if (avatarDropdownList) hideDropdownList(avatarDropdownList);
-            });
-        }
-
-
-        // --- Chat Application Logic ---
-        function addChatMessageToUI(msgData, isSystem = false) {
-            const item = document.createElement('li');
-            item.classList.add('chat-message-item');
-            if (isSystem) item.classList.add('system-message');
-
-            const avatarContainer = document.createElement('div');
-            avatarContainer.classList.add('chat-avatar-container');
-            const avatarImgElement = document.createElement('img');
-            avatarImgElement.src = msgData.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(msgData.username || 'User')}`;
-            avatarImgElement.alt = msgData.username || 'User';
-            avatarImgElement.classList.add('avatar'); // Use class from your images.css
-            avatarContainer.appendChild(avatarImgElement);
-            item.appendChild(avatarContainer);
-
-            const messageBodyDiv = document.createElement('div');
-            messageBodyDiv.classList.add('chat-message-body');
-
-            if (!isSystem) {
-                const nameSpan = document.createElement('div'); // Changed to div for block
-                nameSpan.classList.add('chat-author-name');
-                nameSpan.textContent = msgData.username;
-                messageBodyDiv.appendChild(nameSpan);
-            }
-
-            if (msgData.type === 'text' && msgData.text) {
-                const textSpan = document.createElement('div'); // Changed to div
-                textSpan.classList.add('chat-message-text-content');
-                textSpan.textContent = msgData.text;
-                messageBodyDiv.appendChild(textSpan);
-            } else if ((msgData.type === 'image' || msgData.type === 'video') && msgData.fileInfo && msgData.fileInfo.url) {
-                const mediaDiv = document.createElement('div');
-                mediaDiv.classList.add('chat-message-media');
-                if (msgData.type === 'image') {
-                    const img = document.createElement('img');
-                    img.src = msgData.fileInfo.url;
-                    img.alt = msgData.fileInfo.name || 'Image attachment';
-                    img.onclick = () => window.open(msgData.fileInfo.url, '_blank');
-                    mediaDiv.appendChild(img);
-                } else if (msgData.type === 'video') {
-                    const video = document.createElement('video');
-                    video.src = msgData.fileInfo.url;
-                    video.controls = true;
-                    mediaDiv.appendChild(video);
-                }
-                messageBodyDiv.appendChild(mediaDiv);
-                const fileInfoSpan = document.createElement('div'); // Changed to div
-                fileInfoSpan.classList.add('chat-file-info');
-                fileInfoSpan.textContent = `${msgData.fileInfo.name} (${(msgData.fileInfo.size / 1024).toFixed(1)} KB)`;
-                messageBodyDiv.appendChild(fileInfoSpan);
-            } else if (isSystem && msgData.text) { // For system messages text
-                const textSpan = document.createElement('div');
-                textSpan.textContent = msgData.text;
-                messageBodyDiv.appendChild(textSpan);
-            }
-
-
-            if (msgData.timestamp && !isSystem) {
-                const timeSpan = document.createElement('div'); // Changed to div
-                timeSpan.classList.add('chat-timestamp');
-                timeSpan.textContent = new Date(msgData.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                messageBodyDiv.appendChild(timeSpan);
-            }
-            item.appendChild(messageBodyDiv);
-            messagesUl.appendChild(item);
-            messagesUl.scrollTop = messagesUl.scrollHeight;
-        }
-
-        if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
-                clearAllErrors();
-                const email = emailInput.value;
-                if (email && email.includes('@')) { // Basic email validation
-                    socket.emit('login with email', email);
-                } else {
-                    authErrorP.textContent = 'Please enter a valid email address.';
-                }
-            });
-        }
-
-        if (joinRoomBtn) {
-            joinRoomBtn.addEventListener('click', () => {
-                clearAllErrors();
-                const roomName = roomInput.value;
-                if (roomName) {
-                    socket.emit('join room', { roomName });
-                } else {
-                    roomErrorP.textContent = 'Please enter a room name.';
-                }
-            });
-        }
-
-        if (fileInput) {
-            fileInput.addEventListener('change', (event) => {
-                selectedFile = event.target.files[0];
-                if (selectedFile) {
-                    filePreviewP.textContent = `Selected: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(1)} KB)`;
-                    messageInput.placeholder = "Press send or add a comment for the file...";
-                } else {
-                    filePreviewP.textContent = '';
-                    messageInput.placeholder = "Type a message or select a file...";
-                }
-            });
-        }
-
-        if (messageForm) {
-            messageForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                clearAllErrors();
-                if (!currentGlobalUsername || !currentGlobalRoom) {
-                    chatErrorP.textContent = 'Must be logged in and in a room.';
-                    return;
-                }
-
-                if (selectedFile) {
-                    const reader = new FileReader();
-                    reader.onload = (eventReader) => {
-                        socket.emit('send file', {
-                            fileBuffer: eventReader.target.result,
-                            fileName: selectedFile.name,
-                            fileType: selectedFile.type
-                        });
-                        selectedFile = null;
-                        if (fileInput) fileInput.value = '';
-                        filePreviewP.textContent = '';
-                        if (messageInput) {
-                            messageInput.value = '';
-                            messageInput.placeholder = "Type a message or select a file...";
-                        }
-                    };
-                    reader.readAsArrayBuffer(selectedFile);
-                } else if (messageInput && messageInput.value.trim()) {
-                    socket.emit('chat message', { text: messageInput.value.trim() });
-                    messageInput.value = '';
-                } else {
-                    chatErrorP.textContent = "Type a message or select a file to send.";
-                }
-            });
-        }
-
-        if (chatLogoutButton) {
-            chatLogoutButton.addEventListener('click', () => {
-                currentGlobalUsername = null;
-                currentUserGlobalAvatar = null;
-                currentGlobalRoom = null;
-                selectedFile = null;
-
-                if (authSetupDiv) authSetupDiv.style.display = 'block';
-                if (roomSetupDiv) roomSetupDiv.style.display = 'none';
-                if (chatAreaContent) chatAreaContent.style.display = 'none';
-
-                if (chatUserHeaderControls) chatUserHeaderControls.style.display = 'none';
-                if (headerAuthButtons) headerAuthButtons.style.display = 'block';
-                if (headerUsernameDisplay) headerUsernameDisplay.textContent = 'User Name'; // Reset header
-                if (headerAvatarDisplay) headerAvatarDisplay.src = 'images/user-sample.png'; // Reset avatar
-
-                if (emailInput) emailInput.value = '';
-                if (roomInput) roomInput.value = '';
-                if (messageInput) messageInput.value = '';
-                if (messagesUl) messagesUl.innerHTML = '';
-                console.log('User logged out from chat');
-                // socket.emit('user logged out'); // Optional: notify server
-            });
-        }
-
-        // Socket Event Handlers
-        socket.on('auth success', ({ username, avatarUrl }) => {
-            currentGlobalUsername = username;
-            currentUserGlobalAvatar = avatarUrl;
-
-            if (displayChatUsernameSpan) displayChatUsernameSpan.textContent = username;
-
-            // Update main header
-            if (headerUsernameDisplay) headerUsernameDisplay.textContent = username;
-            if (headerAvatarDisplay) headerAvatarDisplay.src = avatarUrl || 'images/user-sample.png'; // Fallback
-            if (chatUserHeaderControls) chatUserHeaderControls.style.display = 'flex';
-            if (headerAuthButtons) headerAuthButtons.style.display = 'none';
-
-            if (authSetupDiv) authSetupDiv.style.display = 'none';
-            if (roomSetupDiv) roomSetupDiv.style.display = 'block';
-            if (chatAreaContent) chatAreaContent.style.display = 'none';
-            clearAllErrors();
-        });
-
-        socket.on('auth error', (message) => { if (authErrorP) authErrorP.textContent = message; });
-
-        socket.on('room joined', (roomName) => {
-            currentGlobalRoom = roomName;
-            if (currentRoomNameSpan) currentRoomNameSpan.textContent = roomName;
-            if (roomSetupDiv) roomSetupDiv.style.display = 'none';
-            if (chatAreaContent) chatAreaContent.style.display = 'block';
-            if (messagesUl) messagesUl.innerHTML = '';
-            addChatMessageToUI({ text: `You joined '${roomName}'`, avatarUrl: currentUserGlobalAvatar, username: 'System', type: 'system' }, true);
-            clearAllErrors();
-        });
-
-        socket.on('previous messages', (messages) => { messages.forEach(msg => addChatMessageToUI(msg)); });
-
-        socket.on('new message', (msgData) => {
-            if (msgData.room === currentGlobalRoom) {
-                addChatMessageToUI(msgData);
-                // Bell animation if page not visible
-                if (document.hidden) {
-                    unreadedMessagesAnimation();
-                }
-            }
-        });
-
-        socket.on('user joined', (data) => {
-            if (data.room === currentGlobalRoom && data.username !== currentGlobalUsername) {
-                addChatMessageToUI({ text: `${data.username} joined the room.`, avatarUrl: data.avatarUrl, username: 'System', type: 'system' }, true);
-            }
-        });
-
-        socket.on('user left', (data) => {
-            if (data.room === currentGlobalRoom) {
-                addChatMessageToUI({ text: `${data.username} left the room.`, avatarUrl: data.avatarUrl, username: 'System', type: 'system' }, true);
-            }
-        });
-
-        socket.on('error message', (message) => {
-            if (authSetupDiv && authSetupDiv.style.display !== 'none' && authErrorP) authErrorP.textContent = message;
-            else if (roomSetupDiv && roomSetupDiv.style.display !== 'none' && roomErrorP) roomErrorP.textContent = message;
-            else if (chatErrorP) chatErrorP.textContent = message;
-        });
-
-        // Notification function (from your layout - can be called by chat logic)
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            // Ensure your notification.css styles .notification and .notification-[type]
-            notification.className = `notification notification-${type}`;
-            // Using a simplified structure, assuming your CSS handles it or you adapt it
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <div class="notification-icon">
-                        ${type === 'success'
-                    ? '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--accent2-clr, green)"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>'
-                    : '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--accent1-clr, red)"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>'}
-                    </div>
-                    <div class="notification-message">${message}</div>
-                </div>
-                <button class="notification-close">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
-                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
-                    </svg>
-                </button>
-            `;
-            document.body.appendChild(notification);
-            const closeBtn = notification.querySelector('.notification-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    notification.classList.add('notification-hide'); // Requires CSS for this class
-                    setTimeout(() => notification.remove(), 300); // Match CSS animation
-                });
-            }
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    notification.classList.add('notification-hide');
-                    setTimeout(() => notification.remove(), 300);
-                }
-            }, 4000);
-            setTimeout(() => {
-                notification.classList.add('notification-show'); // Requires CSS for this class
-            }, 10);
-        }
-    </script>
+    <script src="main.js"></script>
 </body>
 
 </html>

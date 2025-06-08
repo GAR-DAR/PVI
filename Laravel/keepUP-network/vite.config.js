@@ -8,19 +8,8 @@ export default defineConfig({
             input: [
                 
                 'resources/js/app.js',
-                'resources/js/main.js',
-
-
-                //students
-                'resources/js/students/studets.js',
-                'resources/js/students/validation.js',
                 'resources/js/notifications.js',
                 
-
-
-
-
-
 
                 'resources/css/app.css',
                 // Root styles
@@ -44,7 +33,8 @@ export default defineConfig({
                 // Modal styles
                 'resources/css/modals/delete-student-modal.css',
 
-                'resources/css/profile.css'
+                'resources/css/profile.css',
+                'resources/css/chat.css'
 
             ],
             refresh: true,
